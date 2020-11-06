@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:placement_stats/Widgets/Recruiter/already_recruited.dart';
 import 'package:placement_stats/Widgets/Recruiter/recruiter_app_drawer.dart';
 
@@ -149,10 +147,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            SvgPicture.network(
-                              'https://image.flaticon.com/icons/svg/1904/1904437.svg',
-                              height: 128,
+                            Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/registration.png"),
+                                ),
+                              ),
+                              height: 120,
                             ),
+                            SizedBox(height: 10),
                             Text(
                               'Student Registration',
                               style: cardTextStyle,
