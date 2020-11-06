@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
+import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
 
 class SignUpStudent extends StatefulWidget {
   static const String routeName = "/signUp-student";
@@ -74,6 +75,7 @@ class _SignUpStudentState extends State<SignUpStudent> {
     }
     _formKey.currentState.save();
     print(_userData);
+    Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
   }
 
   @override
@@ -286,6 +288,7 @@ class _SignUpStudentState extends State<SignUpStudent> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide(color: Colors.transparent)
                             ),
                             labelText: "Semester",
                           ),

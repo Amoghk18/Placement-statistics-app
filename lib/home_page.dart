@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
+import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 
 class HomePage extends StatelessWidget {
-  void pushToLogin(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(LoginForm.routeName);
+  static const String routeName = "/home-page";
+  void pushToLogin(BuildContext context, String goto) {
+    goto == "student"
+        ? Navigator.of(context).pushReplacementNamed(LoginForm.routeName)
+        : Navigator.of(context)
+            .pushReplacementNamed(LoginFormRecruiter.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[150],
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -17,9 +23,9 @@ class HomePage extends StatelessWidget {
             Text(
               "Welcome to Portal",
               style: TextStyle(
-                fontSize: 36,
-                color: Color(0xFF71adb5),
-              ),
+                  fontSize: 36,
+                  color: Color(0xFF71adb5),
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 50),
             Padding(
@@ -27,7 +33,7 @@ class HomePage extends StatelessWidget {
               child: Text(
                 "Sign in / Sign Up as a",
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: 24,
                   color: Color(0xFF71adb5),
                 ),
               ),
@@ -36,7 +42,7 @@ class HomePage extends StatelessWidget {
               margin: EdgeInsets.all(28),
               child: OutlineButton(
                 child: Text(
-                  "Student",
+                  " Student ",
                   style: TextStyle(
                     fontSize: 24.0,
                     color: Color(0xFFfc6b3f),
@@ -46,9 +52,14 @@ class HomePage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 splashColor: Color(0xFFff5722),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                onPressed: () => pushToLogin(context),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                onPressed: () => pushToLogin(context, "student"),
               ),
+            ),
+            Text(
+              "OR",
+              style: TextStyle(fontSize: 18),
             ),
             Container(
               margin: EdgeInsets.all(28),
@@ -64,9 +75,9 @@ class HomePage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 splashColor: Color(0xFFff5722),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                onPressed: () => pushToLogin(context),
+                onPressed: () => pushToLogin(context, "recruiter"),
               ),
             ),
           ],

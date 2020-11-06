@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:placement_stats/Screens/AuthScreens/signUp_student.dart';
-import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
+import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
+import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
 
-class LoginForm extends StatefulWidget {
-  static const String routeName = "/login-student";
+class LoginFormRecruiter extends StatefulWidget {
+  static const String routeName = "/login-recruiter";
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _LoginFormRecruiterState createState() => _LoginFormRecruiterState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
   var _usn;
   var _password;
   final _formKey = GlobalKey<FormState>();
@@ -30,14 +30,14 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _handleTap() {
-    Navigator.of(context).pushReplacementNamed(SignUpStudent.routeName);
+    Navigator.of(context).pushReplacementNamed(SignUpRecruiter.routeName);
   }
 
   void _login() {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     print(_usn + " : " + _password);
-    Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
+    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
   }
 
   @override
@@ -67,6 +67,7 @@ class _LoginFormState extends State<LoginForm> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       focusedErrorBorder: OutlineInputBorder(
@@ -83,8 +84,8 @@ class _LoginFormState extends State<LoginForm> {
                         Icons.person,
                         color: Colors.blueGrey,
                       ),
-                      labelText: "USN",
-                      hintText: "Enter your USN",
+                      labelText: "Email",
+                      hintText: "Enter your Email",
                       labelStyle: TextStyle(
                         color: Colors.blueGrey,
                       ),
@@ -111,7 +112,10 @@ class _LoginFormState extends State<LoginForm> {
                     onSaved: (val) => _usn = val,
                     validator: (val) {
                       if (val.isEmpty) {
-                        return "Please enter a valid USN";
+                        return "Please enter a valid email";
+                      }
+                      if(!val.contains("@")){
+                        return "Please enter a valid email";
                       }
                       return null;
                     },

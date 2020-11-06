@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
+import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
+import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
 
 class SignUpRecruiter extends StatefulWidget {
   static const String routeName = "/signUp-recruiter";
@@ -40,7 +41,7 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
   }
 
   void _handleTap() {
-    Navigator.of(context).pushReplacementNamed(LoginForm.routeName);
+    Navigator.of(context).pushReplacementNamed(LoginFormRecruiter.routeName);
   }
 
   void _signUp() {
@@ -59,6 +60,7 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
     }
     _formKey.currentState.save();
     print(_userData);
+    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
   }
 
   @override
