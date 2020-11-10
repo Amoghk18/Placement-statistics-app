@@ -83,7 +83,6 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
               Container(
                 height: 500,
                 width: double.infinity,
-                color: Colors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

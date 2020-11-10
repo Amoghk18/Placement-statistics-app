@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_student.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
 
@@ -16,6 +17,7 @@ class _LoginFormState extends State<LoginForm> {
   FocusNode _focusNode = FocusNode();
 
   TapGestureRecognizer _ontap;
+  var _showPassword = false;
 
   @override
   void initState() {
@@ -42,101 +44,111 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(50, 110, 0, 30),
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 36,
-                      color: Colors.blueGrey,
-                      decoration: TextDecoration.overline,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
-                  child: TextFormField(
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.blueGrey,
-                      ),
-                      labelText: "USN",
-                      hintText: "Enter your USN",
-                      labelStyle: TextStyle(
-                        color: Colors.blueGrey,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.white),
-                        gapPadding: 5,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        gapPadding: 5,
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(50, 110, 0, 30),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 36,
+                          color: Colors.blueGrey,
+                          decoration: TextDecoration.overline,
+                        ),
                       ),
                     ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_focusNode);
-                    },
-                    onSaved: (val) => _usn = val,
-                    validator: (val) {
-                      if (val.isEmpty) {
-                        return "Please enter a valid USN";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                  child: TextFormField(
-                    textInputAction: TextInputAction.done,
-                    obscureText: true,
-                    focusNode: _focusNode,
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
+                      child: TextFormField(
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide(color: Colors.red),
+                            gapPadding: 5,
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide(color: Colors.red),
+                            gapPadding: 5,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.person,
+                            color: Colors.blueGrey,
+                          ),
+                          labelText: "USN",
+                          hintText: "Enter your USN",
+                          labelStyle: TextStyle(
+                            color: Colors.blueGrey,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 25,
+                            vertical: 20,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide(color: Colors.white),
+                            gapPadding: 5,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide:
+                                BorderSide(color: Theme.of(context).primaryColor),
+                            gapPadding: 5,
+                          ),
+                        ),
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_focusNode);
+                        },
+                        onSaved: (val) => _usn = val,
+                        validator: (val) {
+                          if (val.isEmpty) {
+                            return "Please enter a valid USN";
+                          }
+                          return null;
+                        },
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        color: Colors.blueGrey,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                      child: TextFormField(
+                        textInputAction: TextInputAction.done,
+                        obscureText: _showPassword ? false : true,
+                        focusNode: _focusNode,
+                        decoration: InputDecoration(
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide(color: Colors.red),
+                            gapPadding: 5,
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide(color: Colors.red),
+                            gapPadding: 5,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.lock,
+                            color: Colors.blueGrey,
+                          ),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
+                            },
+                            child: Icon(_showPassword
+                            ? FontAwesome.eye_slash
+                            : FontAwesome.eye),
                       ),
                       labelText: "Password",
                       hintText: "Enter your password",

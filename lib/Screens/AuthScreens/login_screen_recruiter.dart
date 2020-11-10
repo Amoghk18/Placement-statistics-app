@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
 import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
 
@@ -16,6 +17,7 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
   FocusNode _focusNode = FocusNode();
 
   TapGestureRecognizer _ontap;
+  var _showPassword = false;
 
   @override
   void initState() {
@@ -114,7 +116,7 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
                       if (val.isEmpty) {
                         return "Please enter a valid email";
                       }
-                      if(!val.contains("@")){
+                      if (!val.contains("@")) {
                         return "Please enter a valid email";
                       }
                       return null;
@@ -125,7 +127,7 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
                   padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
                   child: TextFormField(
                     textInputAction: TextInputAction.done,
-                    obscureText: true,
+                    obscureText: _showPassword ? false : true,
                     focusNode: _focusNode,
                     decoration: InputDecoration(
                       focusedErrorBorder: OutlineInputBorder(
@@ -141,6 +143,16 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
                       prefixIcon: const Icon(
                         Icons.lock,
                         color: Colors.blueGrey,
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
+                        },
+                        child: Icon(_showPassword
+                            ? FontAwesome.eye_slash
+                            : FontAwesome.eye),
                       ),
                       labelText: "Password",
                       hintText: "Enter your password",

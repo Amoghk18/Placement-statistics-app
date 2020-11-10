@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:placement_stats/Screens/DetailScreens/experience_detail.dart';
 
 class ExperiencesList extends StatefulWidget {
   @override
@@ -37,83 +38,104 @@ class _ExperiencesListState extends State<ExperiencesList> {
     },
   ];
 
+  void _pushToDetailScreen(int i) {
+    Navigator.of(context).pushNamed(
+      ExperienceDetailScreen.routeName,
+      arguments: {"data": _exp[i]},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.35,
-      //color: Colors.blue,
+      height: MediaQuery.of(context).size.height * 0.37,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: _exp.length,
         itemBuilder: (ctx, i) => Padding(
           padding: const EdgeInsets.all(16),
-          child: Card(
-            color: Colors.red,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(color: Colors.red, blurRadius: 40),
-                ],
+          child: Hero(
+            tag: _exp[i]["work"],
+            child: Card(
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-              width: MediaQuery.of(context).size.width * 0.8,
-              padding: EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 15,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _exp[i]["name"],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+              child: InkWell(
+                splashColor: Colors.orange,
+                onTap: () => _pushToDetailScreen(i),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(color: Colors.red, blurRadius: 40),
+                    ],
                   ),
-                  Text(
-                    _exp[i]["work"],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 15,
                   ),
-                  Text(
-                    _exp[i]["college"],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _exp[i]["name"],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        _exp[i]["work"],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        _exp[i]["college"],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.black,
+                        thickness: 2,
+                        endIndent: 15,
+                        height: 30,
+                      ),
+                      Text(
+                        "Let's see what they have to say...",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '"${_exp[i]['desc']}"',
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Click to see more!",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
                   ),
-                  Divider(
-                    color: Colors.black,
-                    thickness: 2,
-                    endIndent: 15,
-                    height: 30,
-                  ),
-                  Text(
-                    "Let's see what they have to say...",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '"${_exp[i]['desc']}"',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      color: Colors.black87,
-                    ),
-                    maxLines: 5,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                ),
               ),
             ),
           ),

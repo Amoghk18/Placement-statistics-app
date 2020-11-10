@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
 
@@ -42,6 +43,8 @@ class _SignUpStudentState extends State<SignUpStudent> {
   final _confirmFocus = FocusNode();
 
   TapGestureRecognizer _ontap;
+  var _showPassword = false;
+  var _showCPassword = false;
 
   @override
   void initState() {
@@ -287,9 +290,9 @@ class _SignUpStudentState extends State<SignUpStudent> {
                           },
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(color: Colors.transparent)
-                            ),
+                                borderRadius: BorderRadius.circular(50),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
                             labelText: "Semester",
                           ),
                           style:
@@ -346,7 +349,7 @@ class _SignUpStudentState extends State<SignUpStudent> {
                   padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
                   child: TextFormField(
                     focusNode: _passFocus,
-                    obscureText: true,
+                    obscureText: _showPassword ? false : true,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       focusedErrorBorder: OutlineInputBorder(
@@ -362,6 +365,16 @@ class _SignUpStudentState extends State<SignUpStudent> {
                       prefixIcon: const Icon(
                         Icons.lock,
                         color: Colors.blueGrey,
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
+                        },
+                        child: Icon(_showPassword
+                            ? FontAwesome.eye_slash
+                            : FontAwesome.eye),
                       ),
                       labelText: "Password",
                       hintText: "Enter your password",
@@ -404,7 +417,7 @@ class _SignUpStudentState extends State<SignUpStudent> {
                   padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
                   child: TextFormField(
                     focusNode: _confirmFocus,
-                    obscureText: true,
+                    obscureText: _showCPassword ? false : true,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
                       focusedErrorBorder: OutlineInputBorder(
@@ -420,6 +433,16 @@ class _SignUpStudentState extends State<SignUpStudent> {
                       prefixIcon: const Icon(
                         Icons.lock,
                         color: Colors.blueGrey,
+                      ),
+                      suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _showCPassword = !_showCPassword;
+                              });
+                            },
+                            child: Icon(_showCPassword
+                            ? FontAwesome.eye_slash
+                            : FontAwesome.eye),
                       ),
                       labelText: "Confirm Password",
                       hintText: "Confirm your password",
@@ -461,7 +484,10 @@ class _SignUpStudentState extends State<SignUpStudent> {
                   onPressed: _signUp,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Sign Up", style: TextStyle(fontSize: 24),),
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 24),
+                    ),
                   ),
                 ),
                 Container(

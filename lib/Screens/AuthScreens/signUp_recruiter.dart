@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
 
@@ -27,6 +28,8 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
   final _confirmFocus = FocusNode();
 
   TapGestureRecognizer _ontap;
+  var _showPassword = false;
+  var _showCPassword = false;
 
   @override
   void initState() {
@@ -313,7 +316,7 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                   padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
                   child: TextFormField(
                     focusNode: _passFocus,
-                    obscureText: true,
+                    obscureText: _showPassword ? false : true,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
@@ -330,6 +333,16 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                       prefixIcon: const Icon(
                         Icons.lock,
                         color: Colors.blueGrey,
+                      ),
+                      suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
+                            },
+                            child: Icon(_showPassword
+                            ? FontAwesome.eye_slash
+                            : FontAwesome.eye),
                       ),
                       labelText: "Password",
                       hintText: "Enter your password",
@@ -372,7 +385,7 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                   padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
                   child: TextFormField(
                     focusNode: _confirmFocus,
-                    obscureText: true,
+                    obscureText: _showCPassword ? false : true,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
@@ -389,6 +402,16 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                       prefixIcon: const Icon(
                         Icons.lock,
                         color: Colors.blueGrey,
+                      ),
+                      suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _showCPassword = !_showCPassword;
+                              });
+                            },
+                            child: Icon(_showCPassword
+                            ? FontAwesome.eye_slash
+                            : FontAwesome.eye),
                       ),
                       labelText: "Confirm Password",
                       hintText: "Confirm your password",

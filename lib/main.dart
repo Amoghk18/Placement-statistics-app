@@ -4,6 +4,8 @@ import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_student.dart';
+import 'package:placement_stats/Screens/DetailScreens/chart_detail_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/experience_detail.dart';
 import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
 import 'package:placement_stats/home_page.dart';
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
         LoginFormRecruiter.routeName: (ctx) => LoginFormRecruiter(),
         HomeScreenStudent.routeName: (ctx) => HomeScreenStudent(),
         HomeScreen.routeName: (ctx) => HomeScreen(),
+        ExperienceDetailScreen.routeName: (ctx) => ExperienceDetailScreen(),
+        ChartDetailScreen.routeName: (ctx) => ChartDetailScreen(),
       },
     );
   }
