@@ -11,10 +11,11 @@ class ExperienceDetailScreen extends StatelessWidget {
     return Hero(
       tag: exp["work"],
           child: Scaffold(
-        backgroundColor: Colors.yellow[200],
+        backgroundColor: Colors.black,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.white),
         ),
         body: Container(
           child: Column(
@@ -27,7 +28,7 @@ class ExperienceDetailScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 29,
                     fontWeight: FontWeight.w600,
-                    color: Colors.blue[300],
+                    color: Colors.yellow,
                   ),
                 ),
               ),
@@ -38,7 +39,7 @@ class ExperienceDetailScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.blue[300],
+                    color: Colors.yellow[200],
                   ),
                 ),
               ),

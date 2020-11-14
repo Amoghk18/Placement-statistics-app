@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:placement_stats/OnBoardingScreens/recruiter/onBoarding.dart';
+import 'package:placement_stats/OnBoardingScreens/student/onBoarding.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (ctx) => HomeScreen(),
         ExperienceDetailScreen.routeName: (ctx) => ExperienceDetailScreen(),
         ChartDetailScreen.routeName: (ctx) => ChartDetailScreen(),
+        OnBoardingScreenStudent.routeName: (ctx) => OnBoardingScreenStudent(),
+        OnBoardingScreenRecruiter.routeName: (ctx) => OnBoardingScreenRecruiter(),
       },
     );
   }

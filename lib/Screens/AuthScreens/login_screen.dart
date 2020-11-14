@@ -42,27 +42,59 @@ class _LoginFormState extends State<LoginForm> {
     Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
   }
 
+  Widget _buildImg(String name) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.35,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: FadeInImage(
+          placeholder: AssetImage(
+            name,
+          ),
+          fit: BoxFit.cover,
+          image: AssetImage(
+            name,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Form(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildImg("assets/images/login.jpg"),
+              Form(
                 key: _formKey,
                 child: Column(
                   children: [
+                    Divider(
+                      thickness: 2,
+                      indent: 50,
+                      endIndent: 50,
+                      color: Colors.black,
+                      height: 40,
+                    ),
                     Container(
-                      margin: const EdgeInsets.fromLTRB(50, 110, 0, 30),
+                      margin: const EdgeInsets.fromLTRB(50, 0, 0, 20),
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Login",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 36,
-                          color: Colors.blueGrey,
-                          decoration: TextDecoration.overline,
+                          fontSize: 38,
+                          color: Colors.blueAccent,
                         ),
                       ),
                     ),
@@ -102,8 +134,8 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(28),
-                            borderSide:
-                                BorderSide(color: Theme.of(context).primaryColor),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor),
                             gapPadding: 5,
                           ),
                         ),
@@ -147,79 +179,88 @@ class _LoginFormState extends State<LoginForm> {
                               });
                             },
                             child: Icon(_showPassword
-                            ? FontAwesome.eye_slash
-                            : FontAwesome.eye),
-                      ),
-                      labelText: "Password",
-                      hintText: "Enter your password",
-                      labelStyle: TextStyle(
-                        color: Colors.blueGrey,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.white),
-                        gapPadding: 5,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        gapPadding: 5,
-                      ),
-                    ),
-                    onSaved: (val) => _password = val,
-                    validator: (val) {
-                      if (val.isEmpty) {
-                        return "Please enter a valid password";
-                      }
-                      if (val.length < 6) {
-                        return "Password must be at least 6 characters long";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 40),
-                OutlineButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  textColor: Colors.blueGrey,
-                  onPressed: _login,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Don't have an account? ",
-                          style: TextStyle(color: Colors.blueGrey),
+                                ? FontAwesome.eye_slash
+                                : FontAwesome.eye),
+                          ),
+                          labelText: "Password",
+                          hintText: "Enter your password",
+                          labelStyle: TextStyle(
+                            color: Colors.blueGrey,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 25,
+                            vertical: 20,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide(color: Colors.white),
+                            gapPadding: 5,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor),
+                            gapPadding: 5,
+                          ),
                         ),
-                        TextSpan(
-                          text: "Sign Up",
-                          recognizer: _ontap,
-                          style: TextStyle(color: Colors.orange),
-                        ),
-                      ],
+                        onSaved: (val) => _password = val,
+                        validator: (val) {
+                          if (val.isEmpty) {
+                            return "Please enter a valid password";
+                          }
+                          if (val.length < 6) {
+                            return "Password must be at least 6 characters long";
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 40),
+                    OutlineButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      textColor: Colors.blueAccent,
+                      onPressed: _login,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Login",
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "Don't have an account? ",
+                              style: TextStyle(color: Colors.blueGrey),
+                            ),
+                            TextSpan(
+                              text: "Sign Up",
+                              recognizer: _ontap,
+                              style: TextStyle(color: Colors.orange),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      thickness: 2,
+                      indent: 100,
+                      endIndent: 100,
+                      color: Colors.black,
+                      height: 40,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

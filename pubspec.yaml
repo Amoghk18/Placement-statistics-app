@@ -26,6 +26,7 @@ dependencies:
   google_fonts: ^1.1.1
   syncfusion_flutter_charts: ^18.3.44
   flutter_icons: ^1.1.0
+  introduction_screen: ^1.0.9
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -53,6 +54,17 @@ flutter:
     - assets/images/placement.png
     - assets/images/placementtalk.png
     - assets/images/registration.png
+    - assets/images/helpyougrow.jpg
+    - assets/images/resources.jpg
+    - assets/images/exp.jpg
+    - assets/images/timeismoney.jpg
+    - assets/images/schedule.jpg
+    - assets/images/welcome.jpg
+    - assets/images/easy.jpg
+    - assets/images/talent.jpg
+    - assets/images/chart.jpg
+    - assets/images/login.jpg
+    - assets/images/signup.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

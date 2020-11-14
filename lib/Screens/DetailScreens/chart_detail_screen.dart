@@ -23,7 +23,8 @@ class ChartDetailScreen extends StatelessWidget {
         backgroundColor: Colors.yellow[100],
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.yellow[100],
+          backgroundColor: Colors.transparent,
+          //iconTheme: IconThemeData(color: Colors.white),
         ),
         body: Container(
           child: Column(
@@ -36,6 +37,7 @@ class ChartDetailScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
+                    color: Colors.red,
                   ),
                 ),
               ),
@@ -43,6 +45,7 @@ class ChartDetailScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   clipBehavior: Clip.antiAlias,
+                  elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -52,7 +55,7 @@ class ChartDetailScreen extends StatelessWidget {
                     color: Colors.blue,
                     child: SfCartesianChart(
                       plotAreaBorderWidth: 0,
-                      backgroundColor: Colors.black54,
+                      backgroundColor: Colors.black45,
                       borderWidth: 0,
                       enableAxisAnimation: true,
                       title: ChartTitle(
