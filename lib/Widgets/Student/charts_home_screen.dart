@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:placement_stats/Screens/DetailScreens/chart_detail_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/chart_detail_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ChartsForStudent extends StatefulWidget {

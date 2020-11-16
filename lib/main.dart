@@ -6,8 +6,11 @@ import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_student.dart';
-import 'package:placement_stats/Screens/DetailScreens/chart_detail_screen.dart';
-import 'package:placement_stats/Screens/DetailScreens/experience_detail.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/chart_detail_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/experience_detail.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/resource_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/share_your_experience_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/upcoming_schedule.dart';
 import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
 import 'package:placement_stats/home_page.dart';
@@ -42,6 +45,9 @@ class MyApp extends StatelessWidget {
         ChartDetailScreen.routeName: (ctx) => ChartDetailScreen(),
         OnBoardingScreenStudent.routeName: (ctx) => OnBoardingScreenStudent(),
         OnBoardingScreenRecruiter.routeName: (ctx) => OnBoardingScreenRecruiter(),
+        ResourceScreen.routeName: (ctx) => ResourceScreen(),
+        UpcomingScheduleScreen.routeName: (ctx) => UpcomingScheduleScreen(),
+        ShareYourExpScreen.routeName: (ctx) => ShareYourExpScreen(),
       },
     );
   }

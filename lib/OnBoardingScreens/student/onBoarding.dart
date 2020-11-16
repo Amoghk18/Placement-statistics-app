@@ -9,8 +9,7 @@ class OnBoardingScreenStudent extends StatefulWidget {
       _OnBoardingScreenStudentState();
 }
 
-class _OnBoardingScreenStudentState extends State<OnBoardingScreenStudent>
-    with SingleTickerProviderStateMixin {
+class _OnBoardingScreenStudentState extends State<OnBoardingScreenStudent> {
   final _onboardingKey = GlobalKey<IntroductionScreenState>();
 
   final _images = {

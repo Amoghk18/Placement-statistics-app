@@ -25,7 +25,7 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer: StudentDrawer(),
+      drawer: StudentDrawer(0),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,

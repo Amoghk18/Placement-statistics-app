@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:placement_stats/Screens/DetailScreens/experience_detail.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/experience_detail.dart';
 
 class ExperiencesList extends StatefulWidget {
   @override

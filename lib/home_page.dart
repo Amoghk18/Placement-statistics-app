@@ -99,6 +99,8 @@ class _HomePageState extends State<HomePage>
                             ),
                           ),
                           textColor: Color(0xFFfc6b3f),
+                          borderSide: BorderSide(style: BorderStyle.none),
+                          highlightedBorderColor: Color(0xfffc6b3f),
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -122,6 +124,8 @@ class _HomePageState extends State<HomePage>
                             ),
                           ),
                           textColor: Color(0xFFfc6b3f),
+                          borderSide: BorderSide(style: BorderStyle.none),
+                          highlightedBorderColor: Color(0xfffc6b3f),
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),

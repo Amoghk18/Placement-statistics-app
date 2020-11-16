@@ -45,16 +45,20 @@ class _SignUpStudentState extends State<SignUpStudent> {
   TapGestureRecognizer _ontap;
   var _showPassword = false;
   var _showCPassword = false;
+  Color _skinColor = Color(0xffffe9e3);
+  Color _borderColor = Color(0xff681313);
 
   @override
   void initState() {
     _ontap = TapGestureRecognizer()..onTap = _handleTap;
+    _pageController = PageController();
     super.initState();
   }
 
   @override
   void dispose() {
     _ontap.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -81,437 +85,591 @@ class _SignUpStudentState extends State<SignUpStudent> {
     Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
   }
 
+  Widget _buildImg(String name) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: FadeInImage(
+          placeholder: AssetImage(
+            name,
+          ),
+          fit: BoxFit.cover,
+          image: AssetImage(
+            name,
+          ),
+        ),
+      ),
+    );
+  }
+
+  PageController _pageController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(50, 70, 0, 30),
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Sign Up as a Student",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 26,
-                      color: Colors.blueGrey,
-                      decoration: TextDecoration.overline,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                  child: TextFormField(
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.blueGrey,
-                      ),
-                      labelText: "Name",
-                      hintText: "Enter your Name",
-                      labelStyle: TextStyle(
-                        color: Colors.black,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.white),
-                        gapPadding: 5,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        gapPadding: 5,
+        child: PageView(
+          controller: _pageController,
+          scrollDirection: Axis.horizontal,
+          children: [
+            Container(
+              color: Colors.green,
+              child: Column(
+                children: [
+                  _buildImg("assets/images/signup.jpg"),
+                  const Padding(
+                    padding: const EdgeInsets.all(30),
+                    child: Text(
+                      "Set your Account up!",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_emailFocus);
-                    },
-                    onSaved: (val) => _userData["name"] = val,
-                    validator: (val) {
-                      if (val.isEmpty) {
-                        return "Please enter a valid name";
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                  child: TextFormField(
-                    focusNode: _emailFocus,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
+                  const Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Text(
+                      "Sign Up to access all the awesome features.",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.mail,
-                        color: Colors.blueGrey,
-                      ),
-                      labelText: "Email",
-                      hintText: "Enter your Email Id",
-                      labelStyle: TextStyle(
-                        color: Colors.black,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.white),
-                        gapPadding: 5,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        gapPadding: 5,
-                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_usnFocus);
-                    },
-                    onSaved: (val) => _userData["email"] = val,
-                    validator: (val) {
-                      if (val.isEmpty) {
-                        return "Please enter a valid email id";
-                      }
-                      if (!val.contains("@")) {
-                        return "Please enter a valid email id";
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                  child: TextFormField(
-                    focusNode: _usnFocus,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
+                  const Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Text(
+                      "We won't disclose your data to anyone.",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.blueGrey,
-                      ),
-                      labelText: "USN",
-                      hintText: "Enter your USN",
-                      labelStyle: TextStyle(
-                        color: Colors.black,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.white),
-                        gapPadding: 5,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        gapPadding: 5,
-                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_passFocus);
-                    },
-                    onSaved: (val) => _userData["usn"] = val,
-                    validator: (val) {
-                      if (val.isEmpty) {
-                        return "Please enter a valid USN";
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                  child: Row(
+                  const Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Text(
+                      "We give complete privacy to our users.",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 70),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Flexible(
-                        child: DropdownButtonFormField<String>(
-                          items: _semester
-                              .map((sem) => DropdownMenuItem<String>(
-                                    child: Text("$sem"),
-                                    value: "$sem",
-                                  ))
-                              .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              _sem = val;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                            labelText: "Semester",
+                      Icon(
+                        Icons.keyboard_arrow_left,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Swipe left!",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: _skinColor,
+              height: MediaQuery.of(context).size.height,
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Divider(
+                        color: Colors.black,
+                        indent: 50,
+                        endIndent: 50,
+                        height: 20,
+                        thickness: 2,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(50, 10, 0, 10),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Sign Up as a Student",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 26,
+                            color: Colors.black,
                           ),
-                          style:
-                              TextStyle(color: Colors.blueGrey, fontSize: 18),
-                          dropdownColor: Colors.grey[200],
-                          elevation: 0,
-                          validator: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "Select a semester";
-                            }
-                            return null;
-                          },
-                          onSaved: (val) => _userData["sem"] = val,
                         ),
                       ),
-                      SizedBox(width: 20),
-                      Flexible(
-                        child: DropdownButtonFormField<String>(
-                          items: _departments
-                              .map((dept) => DropdownMenuItem<String>(
-                                    child: Text(dept),
-                                    value: dept,
-                                  ))
-                              .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              _dept = val;
-                            });
-                          },
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                        child: TextFormField(
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
                               gapPadding: 5,
                             ),
-                            labelText: "Department",
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              color: Colors.black,
+                            ),
+                            labelText: "Name",
+                            hintText: "Enter your Name",
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _skinColor),
+                              gapPadding: 5,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _borderColor),
+                              gapPadding: 5,
+                            ),
                           ),
-                          style:
-                              TextStyle(color: Colors.blueGrey, fontSize: 18),
-                          dropdownColor: Colors.grey[200],
-                          elevation: 0,
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(_emailFocus);
+                          },
+                          onSaved: (val) => _userData["name"] = val,
                           validator: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "Select a department";
+                            if (val.isEmpty) {
+                              return "Please enter a valid name";
                             }
                             return null;
                           },
-                          onSaved: (val) => _userData["dept"] = val,
                         ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                        child: TextFormField(
+                          focusNode: _emailFocus,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.mail,
+                              color: Colors.black,
+                            ),
+                            labelText: "Email",
+                            hintText: "Enter your Email Id",
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _skinColor),
+                              gapPadding: 5,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _borderColor),
+                              gapPadding: 5,
+                            ),
+                          ),
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(_usnFocus);
+                          },
+                          onSaved: (val) => _userData["email"] = val,
+                          validator: (val) {
+                            if (val.isEmpty) {
+                              return "Please enter a valid email id";
+                            }
+                            if (!val.contains("@")) {
+                              return "Please enter a valid email id";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                        child: TextFormField(
+                          focusNode: _usnFocus,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              color: Colors.black,
+                            ),
+                            labelText: "USN",
+                            hintText: "Enter your USN",
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _skinColor),
+                              gapPadding: 5,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _borderColor),
+                              gapPadding: 5,
+                            ),
+                          ),
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(_passFocus);
+                          },
+                          onSaved: (val) => _userData["usn"] = val,
+                          validator: (val) {
+                            if (val.isEmpty) {
+                              return "Please enter a valid USN";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: DropdownButtonFormField<String>(
+                                iconEnabledColor: Colors.black,
+                                items: _semester
+                                    .map((sem) => DropdownMenuItem<String>(
+                                          child: Text("$sem"),
+                                          value: "$sem",
+                                        ))
+                                    .toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _sem = val;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ),
+                                    gapPadding: 0,
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                    borderSide: BorderSide(
+                                      color: Colors.red,
+                                    ),
+                                    gapPadding: 0,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
+                                  ),
+                                  labelText: "Semester",
+                                ),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                                dropdownColor: Colors.white,
+                                elevation: 0,
+                                validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return "Select a semester";
+                                  }
+                                  return null;
+                                },
+                                onSaved: (val) => _userData["sem"] = val,
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Flexible(
+                              child: DropdownButtonFormField<String>(
+                                iconEnabledColor: Colors.black,
+                                items: _departments
+                                    .map((dept) => DropdownMenuItem<String>(
+                                          child: Text(dept),
+                                          value: dept,
+                                        ))
+                                    .toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _dept = val;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ),
+                                    gapPadding: 0,
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                    borderSide: BorderSide(
+                                      color: Colors.red,
+                                    ),
+                                    gapPadding: 0,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  labelText: "Department",
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                                dropdownColor: Colors.white,
+                                elevation: 0,
+                                validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return "Select a department";
+                                  }
+                                  return null;
+                                },
+                                onSaved: (val) => _userData["dept"] = val,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                        child: TextFormField(
+                          focusNode: _passFocus,
+                          obscureText: _showPassword ? false : true,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                              color: Colors.black,
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _showPassword = !_showPassword;
+                                });
+                              },
+                              child: Icon(
+                                _showPassword
+                                    ? FontAwesome.eye_slash
+                                    : FontAwesome.eye,
+                                color: Colors.black,
+                              ),
+                            ),
+                            labelText: "Password",
+                            hintText: "Enter your password",
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _skinColor),
+                              gapPadding: 5,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _borderColor),
+                              gapPadding: 5,
+                            ),
+                          ),
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(_confirmFocus);
+                          },
+                          onSaved: (val) => _userData["password"] = val,
+                          validator: (val) {
+                            if (val.isEmpty) {
+                              return "Please enter a valid password";
+                            }
+                            if (val.length < 6) {
+                              return "Password must be at least 6 characters long";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                        child: TextFormField(
+                          focusNode: _confirmFocus,
+                          obscureText: _showCPassword ? false : true,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                              color: Colors.black,
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _showCPassword = !_showCPassword;
+                                });
+                              },
+                              child: Icon(
+                                _showCPassword
+                                    ? FontAwesome.eye_slash
+                                    : FontAwesome.eye,
+                                color: Colors.black,
+                              ),
+                            ),
+                            labelText: "Confirm Password",
+                            hintText: "Confirm your password",
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _skinColor),
+                              gapPadding: 5,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _borderColor),
+                              gapPadding: 5,
+                            ),
+                          ),
+                          onSaved: (val) => _userData["confirmPass"] = val,
+                          validator: (val) {
+                            if (val.isEmpty) {
+                              return "Please enter a valid password";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      OutlineButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        textColor: _borderColor,
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                          style: BorderStyle.none,
+                        ),
+                        onPressed: _signUp,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                        alignment: Alignment.center,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "Already have an account? ",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: "Login",
+                                recognizer: _ontap,
+                                style: TextStyle(color: Colors.deepOrange),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.black,
+                        indent: 100,
+                        endIndent: 100,
+                        height: 10,
+                        thickness: 2,
                       ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                  child: TextFormField(
-                    focusNode: _passFocus,
-                    obscureText: _showPassword ? false : true,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        color: Colors.blueGrey,
-                      ),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _showPassword = !_showPassword;
-                          });
-                        },
-                        child: Icon(_showPassword
-                            ? FontAwesome.eye_slash
-                            : FontAwesome.eye),
-                      ),
-                      labelText: "Password",
-                      hintText: "Enter your password",
-                      labelStyle: TextStyle(
-                        color: Colors.black,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.white),
-                        gapPadding: 5,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        gapPadding: 5,
-                      ),
-                    ),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_confirmFocus);
-                    },
-                    onSaved: (val) => _userData["password"] = val,
-                    validator: (val) {
-                      if (val.isEmpty) {
-                        return "Please enter a valid password";
-                      }
-                      if (val.length < 6) {
-                        return "Password must be at least 6 characters long";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                  child: TextFormField(
-                    focusNode: _confirmFocus,
-                    obscureText: _showCPassword ? false : true,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.red),
-                        gapPadding: 5,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        color: Colors.blueGrey,
-                      ),
-                      suffixIcon: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _showCPassword = !_showCPassword;
-                              });
-                            },
-                            child: Icon(_showCPassword
-                            ? FontAwesome.eye_slash
-                            : FontAwesome.eye),
-                      ),
-                      labelText: "Confirm Password",
-                      hintText: "Confirm your password",
-                      labelStyle: TextStyle(
-                        color: Colors.black,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 20,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide: BorderSide(color: Colors.white),
-                        gapPadding: 5,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(28),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                        gapPadding: 5,
-                      ),
-                    ),
-                    onSaved: (val) => _userData["confirmPass"] = val,
-                    validator: (val) {
-                      if (val.isEmpty) {
-                        return "Please enter a valid password";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                SizedBox(height: 20),
-                OutlineButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  textColor: Colors.blueGrey,
-                  onPressed: _signUp,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 40),
-                  alignment: Alignment.center,
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Already have an account? ",
-                          style: TextStyle(color: Colors.blueGrey),
-                        ),
-                        TextSpan(
-                          text: "Login",
-                          recognizer: _ontap,
-                          style: TextStyle(color: Colors.orange),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
