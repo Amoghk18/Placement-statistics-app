@@ -56,7 +56,7 @@ class _AlreadyRecruitedState extends State<AlreadyRecruited> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       height: MediaQuery.of(context).size.height * 0.3,
       child: ListView.builder(
         itemCount: _recruited.length,

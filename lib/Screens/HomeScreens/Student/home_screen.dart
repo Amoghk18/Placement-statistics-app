@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/profile_screen.dart';
 import 'package:placement_stats/Widgets/Student/charts_home_screen.dart';
 import 'package:placement_stats/Widgets/Student/experiences_list.dart';
 import 'package:placement_stats/Widgets/Student/student_appDrawer.dart';
@@ -39,14 +40,19 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.orange[300],
-              child: FittedBox(
-                child: Text(
-                  "SN",
-                  style: TextStyle(color: Colors.white),
+          GestureDetector(
+            onTap: (){
+              Navigator.of(context).pushNamed(ProfileScreen.routeName);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.orange[300],
+                child: FittedBox(
+                  child: Text(
+                    "SN",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ),

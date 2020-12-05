@@ -437,10 +437,12 @@ class _SignUpStudentState extends State<SignUpStudent> {
                               child: DropdownButtonFormField<String>(
                                 iconEnabledColor: Colors.black,
                                 items: _departments
-                                    .map((dept) => DropdownMenuItem<String>(
-                                          child: Text(dept),
-                                          value: dept,
-                                        ))
+                                    .map(
+                                      (dept) => DropdownMenuItem<String>(
+                                        child: Text(dept),
+                                        value: dept,
+                                      ),
+                                    )
                                     .toList(),
                                 onChanged: (val) {
                                   setState(() {

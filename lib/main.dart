@@ -6,8 +6,17 @@ import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_student.dart';
+import 'package:placement_stats/Screens/DetailScreens/recruiter/campus_placment_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/recruiter/company_reg.dart';
+import 'package:placement_stats/Screens/DetailScreens/recruiter/forgot_pass.dart';
+import 'package:placement_stats/Screens/DetailScreens/recruiter/pre_placement_talks_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/recruiter/profile_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/recruiter/success_stories_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/chart_detail_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/experience_detail.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/forgot_password.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/placement_stats_screen.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/profile_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/resource_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/share_your_experience_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/upcoming_schedule.dart';
@@ -48,6 +57,15 @@ class MyApp extends StatelessWidget {
         ResourceScreen.routeName: (ctx) => ResourceScreen(),
         UpcomingScheduleScreen.routeName: (ctx) => UpcomingScheduleScreen(),
         ShareYourExpScreen.routeName: (ctx) => ShareYourExpScreen(),
+        CompanyName.routeName: (ctx) => CompanyName(),
+        ProfileScreen.routeName: (ctx) => ProfileScreen(),
+        ForgotPasswordStudent.routeName: (ctx) => ForgotPasswordStudent(),
+        ProfileScreenRecruiter.routeName: (ctx) => ProfileScreenRecruiter(),
+        ForgotPasswordRecruiter.routeName: (ctx) => ForgotPasswordRecruiter(),
+        CompanyRegScreen.routeName: (ctx) => CompanyRegScreen(),
+        CampusPlacementScreen.routeName: (ctx) => CampusPlacementScreen(),
+        PrePlacementTalkScreen.routeName: (ctx) => PrePlacementTalkScreen(),
+        SuccessStoriesScreen.routeName: (ctx) => SuccessStoriesScreen(),
       },
     );
   }

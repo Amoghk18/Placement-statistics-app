@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/forgot_password.dart';
+import 'package:placement_stats/Screens/DetailScreens/student/placement_stats_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/resource_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/share_your_experience_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/upcoming_schedule.dart';
@@ -36,6 +38,10 @@ class _StudentDrawerState extends State<StudentDrawer> {
     {
       "text": "Upcoming Schedule",
       "icon": FontAwesome.calendar,
+    },
+    {
+      "text": "Update password",
+      "icon": Icons.lock,
     },
     {
       "text": "Logout",
@@ -104,21 +110,32 @@ class _StudentDrawerState extends State<StudentDrawer> {
                       setState(() {
                         selected = i;
                         var nav = Navigator.of(context);
-                        switch(selected){
+                        switch (selected) {
                           case 0:
-                            nav.pushReplacementNamed(HomeScreenStudent.routeName);
+                            nav.pushReplacementNamed(
+                                HomeScreenStudent.routeName);
                             break;
                           case 1:
+                            nav.pushReplacementNamed(CompanyName.routeName);
+                            break;
                           case 2:
-                            nav.pushReplacementNamed(ShareYourExpScreen.routeName);
+                            nav.pushReplacementNamed(
+                                ShareYourExpScreen.routeName);
                             break;
                           case 3:
                             nav.pushReplacementNamed(ResourceScreen.routeName);
                             break;
                           case 4:
-                            nav.pushReplacementNamed(UpcomingScheduleScreen.routeName);
+                            nav.pushReplacementNamed(
+                                UpcomingScheduleScreen.routeName);
                             break;
                           case 5:
+                            nav.pushNamed(
+                              ForgotPasswordStudent.routeName,
+                              arguments: {"from": "update"},
+                            );
+                            break;
+                          case 6:
                             nav.pushReplacementNamed(HomePage.routeName);
                             break;
                         }
