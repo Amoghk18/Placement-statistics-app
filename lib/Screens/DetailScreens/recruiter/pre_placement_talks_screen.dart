@@ -13,10 +13,10 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
   DateTime _selectedDate;
   TimeOfDay _selectedTime;
   final _data = {
-    "date": "",
-    "time": "",
+    "name": "",
+    "datetime": "",
     "agenda": "",
-    "links": "",
+    "link": "",
   };
 
   void _selectDate(BuildContext ctx) {
@@ -94,8 +94,7 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
         _showAlert("time");
       }
     }
-    _data["date"] = _selectedDate.toString();
-    _data["time"] = _selectedTime.format(context);
+    _data["datetime"] = _selectedDate.toString() + " at " + _selectedTime.format(context);
     print(_data);
   }
 
@@ -215,6 +214,33 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                     padding: const EdgeInsets.fromLTRB(40, 10, 20, 10),
                     child: TextFormField(
                       decoration: InputDecoration(
+                          hintText: "Title of the talk",
+                          hintStyle: TextStyle(
+                            color: Colors.white70,
+                          ),
+                          labelText: "Title",
+                          labelStyle: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 18,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orange),
+                          ),
+                          counterStyle: TextStyle(color: Colors.white70)),
+                      cursorColor: Colors.white70,
+                      style: TextStyle(color: Colors.white),
+                      maxLength: 500,
+                      validator: (val) {
+                        if (val.isEmpty) return "Title cannot be empty!";
+                        return null;
+                      },
+                      onSaved: (val) => _data["name"] = val,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(40, 10, 20, 10),
+                    child: TextFormField(
+                      decoration: InputDecoration(
                           hintText: "Agenda of the talk",
                           hintStyle: TextStyle(
                             color: Colors.white70,
@@ -242,11 +268,11 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                     padding: const EdgeInsets.fromLTRB(40, 10, 20, 10),
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: "Useful links for students",
+                        hintText: "Link for the meet",
                         hintStyle: TextStyle(
                           color: Colors.white70,
                         ),
-                        labelText: "Links",
+                        labelText: "Link",
                         labelStyle: TextStyle(
                           color: Colors.white70,
                           fontSize: 18,
@@ -258,12 +284,11 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                       ),
                       cursorColor: Colors.white70,
                       style: TextStyle(color: Colors.white),
-                      maxLength: 500,
                       validator: (val) {
-                        if (val.isEmpty) return "Links cannot be empty!";
+                        if (val.isEmpty) return "Link cannot be empty!";
                         return null;
                       },
-                      onSaved: (val) => _data["links"] = val,
+                      onSaved: (val) => _data["link"] = val,
                     ),
                   ),
                   SizedBox(height: 40),

@@ -4,48 +4,48 @@ class BuildEbooks extends StatelessWidget {
 
   final _ebooks = [
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "Python Complete Reference",
-      "Author": "Abc Xyz",
+      "name": "Python Complete Reference",
+      "author": "Abc Xyz",
       "link": "https://abc.com"
     },
   ];
@@ -58,12 +58,12 @@ class BuildEbooks extends StatelessWidget {
         itemCount: _ebooks.length,
         itemBuilder: (ctx, i) => ListTile(
           title: Text(
-            _ebooks[i]["Name"],
+            _ebooks[i]["name"],
             style: TextStyle(color: Colors.white, fontSize: 20),
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            _ebooks[i]["Author"],
+            _ebooks[i]["author"],
             style: TextStyle(color: Colors.white70, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),

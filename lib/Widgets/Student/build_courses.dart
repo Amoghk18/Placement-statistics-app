@@ -3,57 +3,57 @@ import 'package:flutter/material.dart';
 class CourseBuilder extends StatelessWidget {
   final _courses = [
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
     {
-      "Name": "Java Complete Guide 2020",
-      "Creator": "Abc Xyz",
-      "Source": "Udemy",
+      "name": "Java Complete Guide 2020",
+      "creator": "Abc Xyz",
+      "source": "Udemy",
       "link": "https://abc.com"
     },
   ];
@@ -70,12 +70,12 @@ class CourseBuilder extends StatelessWidget {
         itemCount: _courses.length,
         itemBuilder: (ctx, i) => ListTile(
           title: Text(
-            _courses[i]["Name"],
+            _courses[i]["name"],
             style: TextStyle(color: Colors.white, fontSize: 20),
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            "${_courses[i]['Creator']}\n${_courses[i]['Source']}",
+            "${_courses[i]['creator']}\n${_courses[i]['source']}",
             style: TextStyle(color: Colors.white70, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),

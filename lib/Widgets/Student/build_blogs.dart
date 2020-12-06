@@ -4,63 +4,53 @@ class BlogBuilder extends StatelessWidget {
   final _blogs = [
     {
       "title": "Texts in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "Row in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "Column in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "Container in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "ListView in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "SingleChildScrollView in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "Animations in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "TextStyle in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "Icons in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
     {
       "title": "Icons in Flutter",
-      "Author": "Abc Xyz",
+      "author": "Abc Xyz",
       "link": "https://abc.com",
-      "image": "https://abc.com",
     },
   ];
 
@@ -77,7 +67,7 @@ class BlogBuilder extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            _blogs[i]["Author"],
+            _blogs[i]["author"],
             style: TextStyle(color: Colors.white70, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),

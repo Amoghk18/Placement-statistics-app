@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:intl/intl.dart';
 
 class CampusPlacementScreen extends StatefulWidget {
   static const String routeName = "/campus-placement";
@@ -11,18 +12,24 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
   final Color _skinColor = Color(0xffffe9e3);
   final Color _borderColor = Color(0xff681313);
   final _process = {
+    "name": "" ,       // fetch from user data
+    "year": DateFormat.y().format(DateTime.now()),
+    "location": "",
+    "duration": "",
+    "eligibilityCrit": "",
     "offOrOn": "Online",
     "platform": "",
     "rounds": "",
     "desc": "",
-    "filtering": "",
     "stipendOrCtc": ""
   };
 
   final _roundsFocus = FocusNode();
   final _descFocus = FocusNode();
-  final _filterFocus = FocusNode();
   final _moneyFocus = FocusNode();
+  final _eligibFocus = FocusNode();
+  final _locationFocus = FocusNode();
+  final _durationFocus = FocusNode();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -254,7 +261,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                     padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
                     child: TextFormField(
                       focusNode: _descFocus,
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         focusedErrorBorder: OutlineInputBorder(
@@ -271,8 +278,8 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                           Icons.details,
                           color: Colors.black,
                         ),
-                        labelText: "Description",
-                        hintText: "Brief description of Rounds",
+                        labelText: "Job Description",
+                        hintText: "Job desciption",
                         labelStyle: TextStyle(
                           color: Colors.black,
                         ),
@@ -293,7 +300,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                         ),
                       ),
                       onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_filterFocus);
+                        FocusScope.of(context).requestFocus(_eligibFocus);
                       },
                       maxLength: 500,
                       cursorColor: Colors.black,
@@ -309,7 +316,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
                     child: TextFormField(
-                      focusNode: _filterFocus,
+                      focusNode: _eligibFocus,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
@@ -324,11 +331,11 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                           gapPadding: 5,
                         ),
                         prefixIcon: const Icon(
-                          FontAwesome.filter,
+                          Icons.details,
                           color: Colors.black,
                         ),
-                        labelText: "Filtering (Optional)",
-                        hintText: "Filtering process",
+                        labelText: "Eligibility Criteria",
+                        hintText: "Eligibility Criteria",
                         labelStyle: TextStyle(
                           color: Colors.black,
                         ),
@@ -349,12 +356,125 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                         ),
                       ),
                       onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_moneyFocus);
+                        FocusScope.of(context).requestFocus(_locationFocus);
                       },
                       maxLength: 500,
                       cursorColor: Colors.black,
-                      onSaved: (val) => _process["filtering"] = val,
+                      onSaved: (val) => _process["eligibilityCric"] = val,
                       validator: (val) {
+                        if (val.isEmpty) {
+                          return "Please enter a valid Criteria";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
+                    child: TextFormField(
+                      focusNode: _locationFocus,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.red),
+                          gapPadding: 5,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.red),
+                          gapPadding: 5,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.monetization_on,
+                          color: Colors.black,
+                        ),
+                        labelText: "Location",
+                        hintText: "Location of internship/job",
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 20,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: _skinColor),
+                          gapPadding: 5,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: _borderColor),
+                          gapPadding: 5,
+                        ),
+                      ),
+                      onFieldSubmitted: (val){
+                        FocusScope.of(context).requestFocus(_durationFocus);
+                      },
+                      cursorColor: Colors.black,
+                      onSaved: (val) => _process["location"] = val,
+                      validator: (val) {
+                        if (val.isEmpty) {
+                          return "Please enter a valid Location";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
+                    child: TextFormField(
+                      focusNode: _durationFocus,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.red),
+                          gapPadding: 5,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.red),
+                          gapPadding: 5,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.monetization_on,
+                          color: Colors.black,
+                        ),
+                        labelText: "Duration",
+                        hintText: "Duration of internship/job",
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 20,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: _skinColor),
+                          gapPadding: 5,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: _borderColor),
+                          gapPadding: 5,
+                        ),
+                      ),
+                      onFieldSubmitted: (val){
+                        FocusScope.of(context).requestFocus(_moneyFocus);
+                      },
+                      cursorColor: Colors.black,
+                      onSaved: (val) => _process["duration"] = val,
+                      validator: (val) {
+                        if (val.isEmpty) {
+                          return "Please enter a valid Duration";
+                        }
                         return null;
                       },
                     ),

@@ -4,48 +4,48 @@ class LinkBuilder extends StatelessWidget {
 
   final _links = [
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
     {
-      "Name": "DSA youtube playlist",
-      "Creator": "Abc Xyz",
+      "name": "DSA youtube playlist",
+      "creator": "Abc Xyz",
       "link": "https://abc.com"
     },
   ];
@@ -62,12 +62,12 @@ class LinkBuilder extends StatelessWidget {
         itemCount: _links.length,
         itemBuilder: (ctx, i) => ListTile(
           title: Text(
-            _links[i]["Name"],
+            _links[i]["name"],
             style: TextStyle(color: Colors.white, fontSize: 20),
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            _links[i]["Creator"],
+            _links[i]["creator"],
             style: TextStyle(color: Colors.white70, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),

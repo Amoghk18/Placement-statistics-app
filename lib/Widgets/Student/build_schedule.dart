@@ -8,7 +8,7 @@ class ScheduleBuilder extends StatefulWidget {
 class _ScheduleBuilderState extends State<ScheduleBuilder> {
   final _schedule = [
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda":
           "1) Knowing about the JD and more about the company.\n2) Knowing about the JD and more about the company.\n3) Knowing about the JD and more about the company",
@@ -16,7 +16,7 @@ class _ScheduleBuilderState extends State<ScheduleBuilder> {
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft Webinar",
+      "name": "Microsoft Webinar",
       "datetime": "28th Nov at 4 pm",
       "agenda":
           "Know more about products of microsoft and discover new technologies offered",
@@ -24,56 +24,56 @@ class _ScheduleBuilderState extends State<ScheduleBuilder> {
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft: Flagship event",
+      "name": "Microsoft: Flagship event",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Win the event and get a prize amount upto 50,000!",
       "link": "https://abc.com",
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Knowing about the JD and more about the company",
       "link": "https://abc.com",
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Knowing about the JD and more about the company",
       "link": "https://abc.com",
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Knowing about the JD and more about the company",
       "link": "https://abc.com",
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Knowing about the JD and more about the company",
       "link": "https://abc.com",
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Knowing about the JD and more about the company",
       "link": "https://abc.com",
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Knowing about the JD and more about the company",
       "link": "https://abc.com",
       "isExpanded": false,
     },
     {
-      "Name": "Microsoft pre-placement talk",
+      "name": "Microsoft pre-placement talk",
       "datetime": "28th Nov at 4 pm",
       "agenda": "Knowing about the JD and more about the company",
       "link": "https://abc.com",
@@ -90,7 +90,7 @@ class _ScheduleBuilderState extends State<ScheduleBuilder> {
         itemCount: _schedule.length,
         itemBuilder: (ctx, i) => ExpansionTile(
           title: Text(
-            _schedule[i]["Name"],
+            _schedule[i]["name"],
             style: TextStyle(
               color: _schedule[i]["isExpanded"] ? Colors.white : _borderColor,
               fontSize: 18,
