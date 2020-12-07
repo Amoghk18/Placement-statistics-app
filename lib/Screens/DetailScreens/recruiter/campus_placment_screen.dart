@@ -12,17 +12,18 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
   final Color _skinColor = Color(0xffffe9e3);
   final Color _borderColor = Color(0xff681313);
   final _process = {
-    "name": "" ,       // fetch from user data
+    "name": "", // fetch from user data
     "year": DateFormat.y().format(DateTime.now()),
-    "location": "",
+    "jd": "",
+    "eligibilityCriteria": "",
     "duration": "",
-    "eligibilityCrit": "",
-    "offOrOn": "Online",
-    "platform": "",
-    "rounds": "",
-    "desc": "",
-    "stipendOrCtc": ""
+    "location": "",
+    "stipendOrCtc": "",
+    "process": "",
+    "rounds": ""
   };
+
+  var _offOrOn = "Online";
 
   final _roundsFocus = FocusNode();
   final _descFocus = FocusNode();
@@ -33,9 +34,10 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _submit(){
-    if(!_formKey.currentState.validate()) return;
+  void _submit() {
+    if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
+    _process["process"] = "$_offOrOn, ${_process['process']}";
     print(_process);
   }
 
@@ -55,12 +57,12 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
         GestureDetector(
           onTap: () {
             setState(() {
-              _process["offOrOn"] = "Online";
+              _offOrOn = "Online";
             });
           },
           child: Text(
             "Online",
-            style: _process["offOrOn"] == "Online"
+            style: _offOrOn == "Online"
                 ? TextStyle(
                     color: _borderColor,
                     fontSize: 17,
@@ -73,12 +75,12 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
         GestureDetector(
           onTap: () {
             setState(() {
-              _process["offOrOn"] = "Offline";
+              _offOrOn = "Offline";
             });
           },
           child: Text(
             "Offline",
-            style: _process["offOrOn"] == "Offline"
+            style: _offOrOn == "Offline"
                 ? TextStyle(
                     color: _borderColor,
                     fontSize: 17,
@@ -142,66 +144,64 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                     padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
                     child: _offOn,
                   ),
-                  _process["offOrOn"] == "Online"
-                      ? Padding(
-                          padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
-                          child: TextFormField(
-                            initialValue: _process["platform"],
-                            keyboardType: TextInputType.name,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(28),
-                                borderSide: BorderSide(color: Colors.red),
-                                gapPadding: 5,
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(28),
-                                borderSide: BorderSide(color: Colors.red),
-                                gapPadding: 5,
-                              ),
-                              prefixIcon: const Icon(
-                                Icons.computer,
-                                color: Colors.black,
-                              ),
-                              labelText: "Platform",
-                              hintText: "Name of the Platform",
-                              labelStyle: TextStyle(
-                                color: Colors.black,
-                              ),
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 25,
-                                vertical: 20,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(28),
-                                borderSide: BorderSide(color: _skinColor),
-                                gapPadding: 5,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(28),
-                                borderSide: BorderSide(color: _borderColor),
-                                gapPadding: 5,
-                              ),
-                            ),
-                            onFieldSubmitted: (val) {
-                              FocusScope.of(context).requestFocus(_roundsFocus);
-                            },
-                            onChanged: (val) {
-                              _process["platform"] = val;
-                            },
-                            cursorColor: Colors.black,
-                            onSaved: (val) => _process["platform"] = val,
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return "Please enter a valid platform name";
-                              }
-                              return null;
-                            },
-                          ),
-                        )
-                      : Container(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
+                    child: TextFormField(
+                      initialValue: _process["process"],
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.red),
+                          gapPadding: 5,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: Colors.red),
+                          gapPadding: 5,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.computer,
+                          color: Colors.black,
+                        ),
+                        labelText: "Process",
+                        hintText: "Process of hiring",
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 20,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: _skinColor),
+                          gapPadding: 5,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(28),
+                          borderSide: BorderSide(color: _borderColor),
+                          gapPadding: 5,
+                        ),
+                      ),
+                      onFieldSubmitted: (val) {
+                        FocusScope.of(context).requestFocus(_roundsFocus);
+                      },
+                      onChanged: (val) {
+                        _process["platform"] = val;
+                      },
+                      cursorColor: Colors.black,
+                      onSaved: (val) => _process["platform"] = val,
+                      validator: (val) {
+                        if (val.isEmpty) {
+                          return "Please enter a valid platform name";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
                     child: TextFormField(
@@ -304,10 +304,10 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                       },
                       maxLength: 500,
                       cursorColor: Colors.black,
-                      onSaved: (val) => _process["desc"] = val,
+                      onSaved: (val) => _process["jd"] = val,
                       validator: (val) {
                         if (val.isEmpty) {
-                          return "Please enter a valid description";
+                          return "Please enter a valid job description";
                         }
                         return null;
                       },
@@ -360,7 +360,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                       },
                       maxLength: 500,
                       cursorColor: Colors.black,
-                      onSaved: (val) => _process["eligibilityCric"] = val,
+                      onSaved: (val) => _process["eligibilityCriteria"] = val,
                       validator: (val) {
                         if (val.isEmpty) {
                           return "Please enter a valid Criteria";
@@ -411,7 +411,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                           gapPadding: 5,
                         ),
                       ),
-                      onFieldSubmitted: (val){
+                      onFieldSubmitted: (val) {
                         FocusScope.of(context).requestFocus(_durationFocus);
                       },
                       cursorColor: Colors.black,
@@ -466,7 +466,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                           gapPadding: 5,
                         ),
                       ),
-                      onFieldSubmitted: (val){
+                      onFieldSubmitted: (val) {
                         FocusScope.of(context).requestFocus(_moneyFocus);
                       },
                       cursorColor: Colors.black,

@@ -10,59 +10,59 @@ class CompanyName extends StatefulWidget {
 class _CompanyDetail extends State<CompanyName> {
   final _arr = [
     {
-      "Company": "google",
-      "Years": ["2001", "2002", "2003"],
+      "company": "google",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "Nutanix",
-      "Years": ["2001", "2002", "2003"],
+      "company": "Nutanix",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "Adobe",
-      "Years": ["2001", "2002", "2003"],
+      "company": "Adobe",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "Amazon",
-      "Years": ["2001", "2002", "2003"],
+      "company": "Amazon",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "netflix",
-      "Years": ["2001", "2002", "2003"],
+      "company": "netflix",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "TCS",
-      "Years": ["2001", "2002", "2003"],
+      "company": "TCS",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "HoneyWell",
-      "Years": ["2001", "2002", "2003"],
+      "company": "HoneyWell",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "Ardroc",
-      "Years": ["2001", "2002", "2003"],
+      "company": "Ardroc",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
     {
-      "Company": "Fidelity",
-      "Years": ["2009", "2010"],
+      "company": "Fidelity",
+      "years": ["2009", "2010"],
       "selected": "-"
     },
     {
-      "Company": "facebook",
-      "Years": ["2001", "2002", "2003"],
+      "company": "facebook",
+      "years": ["2001", "2002", "2003"],
       "selected": "-"
     },
   ];
 
   List<DropdownMenuItem<String>> loadData(int i) {
-    List<String> year = _arr[i]["Years"];
+    List<String> year = _arr[i]["years"];
     List<DropdownMenuItem<String>> yearList = year
         .map(
           (e) => DropdownMenuItem<String>(
@@ -167,7 +167,7 @@ class _CompanyDetail extends State<CompanyName> {
                                   children: [
                                     Align(
                                       child: Text(
-                                        _arr[i]["Company"],
+                                        _arr[i]["company"],
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 18),
                                       ),
@@ -194,7 +194,7 @@ class _CompanyDetail extends State<CompanyName> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                               child: DropdownButton<String>(
-                                key: Key(_arr[i]["Company"]),
+                                key: Key(_arr[i]["company"]),
                                 iconEnabledColor: Colors.white,
                                 //value: _arr[i]["selected"],
                                 hint: Text(
@@ -212,7 +212,7 @@ class _CompanyDetail extends State<CompanyName> {
                             ),
                             RaisedButton(
                               onPressed: () {
-                                print(_arr[i]["Company"].toString() +  " : " + _arr[i]["selected"]);
+                                print(_arr[i]["company"].toString() +  " : " + _arr[i]["selected"]);
                               },
                               color: Colors.black,
                               elevation: 0,
