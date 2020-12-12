@@ -18,13 +18,12 @@ class ChartDetailScreen extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final chart = data["data"];
     return Hero(
-      tag: chart["chartTitle"],
+      tag: chart.chartTitle,
       child: Scaffold(
         backgroundColor: Colors.yellow[100],
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          //iconTheme: IconThemeData(color: Colors.white),
         ),
         body: Container(
           child: Column(
@@ -33,7 +32,7 @@ class ChartDetailScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                 child: Text(
-                  chart["chartTitle"],
+                  chart.chartTitle,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
@@ -59,16 +58,16 @@ class ChartDetailScreen extends StatelessWidget {
                       borderWidth: 0,
                       enableAxisAnimation: true,
                       title: ChartTitle(
-                        text: chart["chartTitle"],
+                        text: chart.chartTitle,
                         textStyle: TextStyle(color: Colors.white),
                       ),
                       primaryXAxis: CategoryAxis(
                         interval: 2,
                         axisLine: AxisLine(color: Colors.red),
                         majorGridLines: MajorGridLines(width: 0),
-                        name: chart["XaxisName"],
+                        name: chart.xaxisName,
                         title: AxisTitle(
-                          text: chart["XaxisName"],
+                          text: chart.xaxisName,
                           textStyle: TextStyle(color: Colors.white),
                         ),
                         labelStyle: TextStyle(color: Colors.white),
@@ -76,9 +75,9 @@ class ChartDetailScreen extends StatelessWidget {
                       primaryYAxis: NumericAxis(
                         axisLine: AxisLine(color: Colors.red),
                         majorGridLines: MajorGridLines(width: 0),
-                        name: chart["YaxisName"],
+                        name: chart.yaxisName,
                         title: AxisTitle(
-                          text: chart["YaxisName"],
+                          text: chart.yaxisName,
                           textStyle: TextStyle(color: Colors.white),
                         ),
                         labelStyle: TextStyle(color: Colors.white),
@@ -86,8 +85,8 @@ class ChartDetailScreen extends StatelessWidget {
                       tooltipBehavior: TooltipBehavior(enable: true),
                       series: <ChartSeries>[
                         LineSeries<PlacementData, int>(
-                          dataSource: _convertData(chart["dataSource"]),
-                          name: chart["seriesName"],
+                          dataSource: _convertData(chart.dataSource),
+                          name: chart.seriesName,
                           xValueMapper: (PlacementData data, _) => data.x,
                           yValueMapper: (PlacementData data, _) => data.y,
                           markerSettings: MarkerSettings(isVisible: true),
@@ -121,7 +120,7 @@ class ChartDetailScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          chart["chartDesc"],
+                          chart.chartDesc,
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 18,
@@ -129,14 +128,6 @@ class ChartDetailScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Text(
-                          chart["chartDesc"],
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
                       ],
                     ),
                   ),

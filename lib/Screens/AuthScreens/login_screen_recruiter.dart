@@ -13,6 +13,7 @@ class LoginFormRecruiter extends StatefulWidget {
 class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
   var _usn;
   var _password;
+  final _role = "recruiter";
   final _formKey = GlobalKey<FormState>();
   FocusNode _focusNode = FocusNode();
 

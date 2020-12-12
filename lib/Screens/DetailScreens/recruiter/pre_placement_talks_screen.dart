@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:placement_stats/Providers/Schedule.dart';
+import 'package:provider/provider.dart';
 
 class PrePlacementTalkScreen extends StatefulWidget {
   static const String routeName = "/pre-placement-talk";
@@ -47,6 +49,7 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  var _isLoading = false;
 
   void _showAlert(String val) {
     showDialog(
@@ -81,7 +84,32 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
     );
   }
 
-  void _notify() {
+  void sfDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(content),
+        actions: [
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void _notify() async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     if (_selectedDate == null && _selectedTime == null) {
@@ -94,8 +122,27 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
         _showAlert("time");
       }
     }
-    _data["datetime"] = _selectedDate.toString() + " at " + _selectedTime.format(context);
-    print(_data);
+    setState(() {
+      _isLoading = true;
+    });
+    _data["datetime"] =
+        "${DateFormat.d().format(_selectedDate)} ${DateFormat.EEEE().format(_selectedDate)}, ${DateFormat.MMM().format(_selectedDate)}" + " at " + _selectedTime.format(context);
+    try {
+      await Provider.of<Schedule>(context, listen: false).createSchedule(_data);
+      sfDialog("Success",
+          "Successfully added a pre-placement talk. The students will be notified!");
+    } catch (err) {
+      sfDialog(
+          "Error", "Something went wrong. Please Try again after some time.");
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -137,7 +184,7 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 15),
                   Container(
                     padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
                     child: Text(
@@ -153,13 +200,13 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(40, 20, 0, 10),
+                        padding: const EdgeInsets.fromLTRB(40, 10, 0, 10),
                         child: RaisedButton(
                           onPressed: () => _selectDate(context),
                           child: Text("Select date"),
                         ),
                       ),
-                      SizedBox(width: 50),
+                      SizedBox(width: 30),
                       Container(
                         child: Text(
                           _selectedDate == null
@@ -178,13 +225,13 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(40, 20, 0, 10),
+                        padding: const EdgeInsets.fromLTRB(40, 10, 0, 10),
                         child: RaisedButton(
                           onPressed: () => _selectTime(context),
                           child: Text("Select time"),
                         ),
                       ),
-                      SizedBox(width: 50),
+                      SizedBox(width: 30),
                       Container(
                         child: Text(
                           _selectedTime == null
@@ -199,7 +246,7 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   Container(
                     padding: const EdgeInsets.fromLTRB(40, 20, 20, 10),
                     child: Text(
@@ -291,26 +338,33 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                       onSaved: (val) => _data["link"] = val,
                     ),
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 30),
                   Align(
-                    child: OutlineButton(
-                      onPressed: _notify,
-                      borderSide: BorderSide(style: BorderStyle.none),
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Notify!",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
+                    child: _isLoading
+                        ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                        )
+                        : OutlineButton(
+                            onPressed: _notify,
+                            borderSide: BorderSide(style: BorderStyle.none),
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Notify!",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   )
                 ],
               ),

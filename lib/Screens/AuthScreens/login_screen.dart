@@ -13,6 +13,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   var _usn;
   var _password;
+  final _role = "student";
   final _formKey = GlobalKey<FormState>();
   FocusNode _focusNode = FocusNode();
 

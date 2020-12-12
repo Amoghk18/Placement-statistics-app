@@ -320,8 +320,8 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                       Icons.person,
                                       color: Colors.black,
                                     ),
-                                    labelText: "USN",
-                                    hintText: "Enter your USN",
+                                    labelText: "Postion",
+                                    hintText: "Your Position in the Company",
                                     labelStyle: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -347,10 +347,10 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                     FocusScope.of(context)
                                         .requestFocus(_passFocus);
                                   },
-                                  onSaved: (val) => _userData["usn"] = val,
+                                  onSaved: (val) => _userData["position"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
-                                      return "Please enter a valid USN";
+                                      return "Please enter a valid Position";
                                     }
                                     return null;
                                   },

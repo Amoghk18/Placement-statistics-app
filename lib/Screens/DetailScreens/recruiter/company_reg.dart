@@ -20,10 +20,33 @@ class CompanyRegScreen extends StatelessWidget {
   final Color _skinColor = Color(0xffffe9e3);
   final Color _borderColor = Color(0xff681313);
 
-  void _register() {
+  void _register(BuildContext context) {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     print(_compData);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          "Success",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+            "We have received your data. To confirm registration please head over to Campus Placement Screen"),
+        actions: [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              Navigator.of(ctx).pop();
+            },
+            child: Text("Ok"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -330,7 +353,7 @@ class CompanyRegScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   OutlineButton(
-                    onPressed: () {},
+                    onPressed: () => _register(context),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(

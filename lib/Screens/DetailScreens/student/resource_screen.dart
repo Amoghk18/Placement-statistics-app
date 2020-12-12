@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:placement_stats/Providers/Blog.dart';
+import 'package:placement_stats/Providers/Course.dart';
+import 'package:placement_stats/Providers/Ebook.dart';
+import 'package:placement_stats/Providers/Link.dart';
 import 'package:placement_stats/Widgets/Student/build_blogs.dart';
 import 'package:placement_stats/Widgets/Student/build_courses.dart';
 import 'package:placement_stats/Widgets/Student/build_ebooks.dart';
 import 'package:placement_stats/Widgets/Student/build_links.dart';
 import 'package:placement_stats/Widgets/Student/student_appDrawer.dart';
+import 'package:provider/provider.dart';
 
 class ResourceScreen extends StatefulWidget {
   static const String routeName = "/resources";
@@ -12,23 +17,35 @@ class ResourceScreen extends StatefulWidget {
   _ResourceScreenState createState() => _ResourceScreenState();
 }
 
-class _ResourceScreenState extends State<ResourceScreen> with SingleTickerProviderStateMixin{
+class _ResourceScreenState extends State<ResourceScreen>
+    with SingleTickerProviderStateMixin {
   var _selected = "Blogs";
 
   final _categories = ["Blogs", "E-books", "Courses", "Links"];
   AnimationController _controller;
   Animation _animation;
+  bool _isLoading = true;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
-    _animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-    _controller.forward();
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animation = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    Provider.of<Blog>(context, listen: false).getAndSetBlogs().then((_) {
+      setState(() {
+        _isLoading = false;
+        _controller.forward();
+      });
+    });
+    Provider.of<Ebook>(context, listen: false).getAndSetEbooks();
+    Provider.of<Course>(context, listen: false).getAndSetCourses();
+    Provider.of<Link>(context, listen: false).getAndSetLinks();
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _controller.dispose();
   }
@@ -82,16 +99,20 @@ class _ResourceScreenState extends State<ResourceScreen> with SingleTickerProvid
 
   Widget _buildResource() {
     if (_selected == "Blogs") {
-      return BlogBuilder();
+      final blogs = Provider.of<Blog>(context, listen: false).blogs;
+      return BlogBuilder(blogs);
     }
     if (_selected == "E-books") {
-      return BuildEbooks();
+      final ebooks = Provider.of<Ebook>(context, listen: false).ebooks;
+      return BuildEbooks(ebooks);
     }
     if (_selected == "Courses") {
-      return CourseBuilder();
+      final courses = Provider.of<Course>(context, listen: false).courses;
+      return CourseBuilder(courses);
     }
     if (_selected == "Links") {
-      return LinkBuilder();
+      final links = Provider.of<Link>(context, listen: false).links;
+      return LinkBuilder(links);
     }
   }
 
@@ -168,14 +189,27 @@ class _ResourceScreenState extends State<ResourceScreen> with SingleTickerProvid
                 style: TextStyle(fontSize: 20),
               ),
             ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.indigo,
-                    borderRadius: BorderRadius.circular(15)),
-                child: FadeTransition(child: _buildResource(), opacity: _animation,),
-              ),
-            ),
+            _isLoading
+                ? Expanded(
+                    child: Container(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.indigo,
+                        ),
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.indigo,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: FadeTransition(
+                        child: _buildResource(),
+                        opacity: _animation,
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),

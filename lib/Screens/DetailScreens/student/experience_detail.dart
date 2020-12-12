@@ -9,8 +9,8 @@ class ExperienceDetailScreen extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final exp = data["data"];
     return Hero(
-      tag: exp["work"],
-          child: Scaffold(
+      tag: exp.companyName,
+      child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
           elevation: 0,
@@ -24,7 +24,7 @@ class ExperienceDetailScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
                 child: Text(
-                  "${exp["name"]}",
+                  "${exp.name}",
                   style: TextStyle(
                     fontSize: 29,
                     fontWeight: FontWeight.w600,
@@ -35,7 +35,7 @@ class ExperienceDetailScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 2, 0, 10),
                 child: Text(
-                  "${exp["work"]}",
+                  "${exp.companyName}",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -70,7 +70,7 @@ class ExperienceDetailScreen extends StatelessWidget {
                                     style: textStyle,
                                   ),
                                   Text(
-                                    "${exp['college']}",
+                                    "BMS College of Engineering",
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
@@ -82,7 +82,32 @@ class ExperienceDetailScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 30),
                             Text(
-                              "${exp['desc']}",
+                              "Position:   ${exp.position}",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Package:   ${exp.ctc}",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                            Text(
+                              "Experience",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                            Divider(color: Colors.black, thickness: 2, endIndent: 200,),
+                            Text(
+                              "${exp.exp}",
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 18,
@@ -91,7 +116,16 @@ class ExperienceDetailScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 30),
                             Text(
-                              "${exp['desc']}",
+                              "Interview Process",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                            Divider(color: Colors.black, thickness: 2, endIndent: 200,),
+                            Text(
+                              "${exp.interviewProcess}",
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 18,
@@ -100,7 +134,18 @@ class ExperienceDetailScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 30),
                             Text(
-                              "${exp['desc']}",
+                              "Suggestions",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                            Divider(color: Colors.black, thickness: 2, endIndent: 200,),
+                            Text(
+                              exp.suggestions == null
+                                  ? "No Suggestions"
+                                  : "${exp.suggestions}",
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 18,

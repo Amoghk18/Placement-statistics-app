@@ -1,146 +1,157 @@
 import 'package:flutter/material.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/experience_detail.dart';
+import 'package:provider/provider.dart';
+import '../../Providers/Experience.dart';
 
 class ExperiencesList extends StatefulWidget {
   @override
   _ExperiencesListState createState() => _ExperiencesListState();
 }
 
-class _ExperiencesListState extends State<ExperiencesList> {
-  final _exp = [
-    {
-      "name": "Abcde uvwxyz",
-      "college": "BMS College of Engineering",
-      "work": "Junior Developer at Google",
-      "desc":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-    },
-    {
-      "name": "Abcde uvwxyz",
-      "college": "BMS College of Engineering",
-      "work": "Data Analyst at Microsoft",
-      "desc":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    },
-    {
-      "name": "Abcde uvwxyz",
-      "college": "BMS College of Engineering",
-      "work": "Android Developer at Amazon",
-      "desc":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    },
-    {
-      "name": "Abcde uvwxyz",
-      "college": "BMS College of Engineering",
-      "work": "Machine Learning Engineer at Netflix",
-      "desc":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    },
-  ];
+class _ExperiencesListState extends State<ExperiencesList>
+    with SingleTickerProviderStateMixin {
+      
+  AnimationController _animationController;
+  Animation _animation;
+  bool _isLoading = true;
 
-  void _pushToDetailScreen(int i) {
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    Provider.of<Experience>(context, listen: false).getAndSetExps().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+      _animationController.forward();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _pushToDetailScreen(int i, ExperienceModel exp) {
     Navigator.of(context).pushNamed(
       ExperienceDetailScreen.routeName,
-      arguments: {"data": _exp[i]},
+      arguments: {"data": exp},
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.37,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: _exp.length,
-        itemBuilder: (ctx, i) => Padding(
-          padding: const EdgeInsets.all(16),
-          child: Hero(
-            tag: _exp[i]["work"],
-            child: Card(
-              color: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+    final _exp = Provider.of<Experience>(context).experiences;
+    return _isLoading
+        ? Container(
+            height: MediaQuery.of(context).size.height * 0.38,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.red,
               ),
-              child: InkWell(
-                splashColor: Colors.orange,
-                onTap: () => _pushToDetailScreen(i),
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(color: Colors.red, blurRadius: 40),
-                    ],
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 15,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _exp[i]["name"],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+            ),
+          )
+        : FadeTransition(
+            opacity: _animation,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.37,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _exp.length,
+                itemBuilder: (ctx, i) => Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Hero(
+                    tag: _exp[i].companyName,
+                    child: Card(
+                      color: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: InkWell(
+                        splashColor: Colors.orange,
+                        onTap: () => _pushToDetailScreen(i, _exp[i]),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(color: Colors.red, blurRadius: 40),
+                            ],
+                          ),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 15,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _exp[i].name,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                _exp[i].companyName,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                _exp[i].college,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Divider(
+                                color: Colors.black,
+                                thickness: 2,
+                                endIndent: 15,
+                                height: 30,
+                              ),
+                              Text(
+                                "Let's see what they have to say...",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                '"${_exp[i].exp}"',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.black87,
+                                ),
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                "Click to see more!",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      Text(
-                        _exp[i]["work"],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        _exp[i]["college"],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.black,
-                        thickness: 2,
-                        endIndent: 15,
-                        height: 30,
-                      ),
-                      Text(
-                        "Let's see what they have to say...",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        '"${_exp[i]['desc']}"',
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: Colors.black87,
-                        ),
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "Click to see more!",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

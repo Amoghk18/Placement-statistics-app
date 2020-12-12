@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:placement_stats/Providers/Hiring_process.dart';
+import 'package:provider/provider.dart';
 
 class CampusPlacementScreen extends StatefulWidget {
   static const String routeName = "/campus-placement";
@@ -12,7 +14,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
   final Color _skinColor = Color(0xffffe9e3);
   final Color _borderColor = Color(0xff681313);
   final _process = {
-    "name": "", // fetch from user data
+    "name": "Faro", // fetch from user data
     "year": DateFormat.y().format(DateTime.now()),
     "jd": "",
     "eligibilityCriteria": "",
@@ -23,7 +25,18 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
     "rounds": ""
   };
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   var _offOrOn = "Online";
+  var _isLoading = false;
 
   final _roundsFocus = FocusNode();
   final _descFocus = FocusNode();
@@ -34,11 +47,50 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _submit() {
+  void sfDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(content),
+        actions: [
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void _submit() async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     _process["process"] = "$_offOrOn, ${_process['process']}";
-    print(_process);
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<HiringProcess>(context, listen: false)
+          .createProcess(_process);
+    } catch (err) {
+      sfDialog("Error", "Something went wrong. Please try again later");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+      sfDialog("Success",
+          "Process has been created. The same will be sent to students.");
+    }
   }
 
   @override
@@ -428,7 +480,7 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                     padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
                     child: TextFormField(
                       focusNode: _durationFocus,
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.phone,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         focusedErrorBorder: OutlineInputBorder(
@@ -532,22 +584,31 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                     ),
                   ),
                   SizedBox(height: 30),
-                  OutlineButton(
-                    onPressed: _submit,
-                    borderSide: BorderSide(style: BorderStyle.none),
-                    textColor: _borderColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        "Submit",
-                        style: TextStyle(
-                          fontSize: 24,
+                  _isLoading
+                      ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.black,
+                            ),
+                          ),
+                      )
+                      : OutlineButton(
+                          onPressed: _submit,
+                          borderSide: BorderSide(style: BorderStyle.none),
+                          textColor: _borderColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                fontSize: 24,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 30),
                 ],
               ),

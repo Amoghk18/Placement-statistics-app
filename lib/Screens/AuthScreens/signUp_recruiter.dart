@@ -18,6 +18,7 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
     "position": "",
     "password": "",
     "confirmPass": "",
+    "role": "recruiter",
   };
 
   final _formKey = GlobalKey<FormState>();

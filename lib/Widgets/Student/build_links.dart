@@ -1,54 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LinkBuilder extends StatelessWidget {
-
-  final _links = [
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "DSA youtube playlist",
-      "creator": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-  ];
+  final _links;
+  LinkBuilder(this._links); 
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +16,12 @@ class LinkBuilder extends StatelessWidget {
         itemCount: _links.length,
         itemBuilder: (ctx, i) => ListTile(
           title: Text(
-            _links[i]["name"],
+            _links[i].name,
             style: TextStyle(color: Colors.white, fontSize: 20),
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            _links[i]["creator"],
+            _links[i].creator,
             style: TextStyle(color: Colors.white70, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),

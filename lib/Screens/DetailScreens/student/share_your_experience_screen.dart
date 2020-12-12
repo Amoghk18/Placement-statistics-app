@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:placement_stats/Providers/Experience.dart';
 import 'package:placement_stats/Widgets/Student/exp_formfield.dart';
 import 'package:placement_stats/Widgets/Student/student_appDrawer.dart';
+import 'package:provider/provider.dart';
 
 class ShareYourExpScreen extends StatefulWidget {
   static const String routeName = "/share-exp";
@@ -30,6 +32,23 @@ class _ShareYourExpScreenState extends State<ShareYourExpScreen> {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     print(_exp);
+    try {
+      Provider.of<Experience>(context, listen: false).shareExp(_exp);
+    } catch (err) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(
+            "Error",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text("Something went wrong. Please make sure you have a good internet connection."),
+        ),
+      );
+    }
   }
 
   @override

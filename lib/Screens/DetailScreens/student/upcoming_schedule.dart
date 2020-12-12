@@ -1,13 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:placement_stats/Providers/Schedule.dart';
 import 'package:placement_stats/Widgets/Student/build_schedule.dart';
 import 'package:placement_stats/Widgets/Student/student_appDrawer.dart';
+import 'package:provider/provider.dart';
 
-class UpcomingScheduleScreen extends StatelessWidget {
+class UpcomingScheduleScreen extends StatefulWidget {
   static const String routeName = "/upcoming-schedule";
 
+  @override
+  _UpcomingScheduleScreenState createState() => _UpcomingScheduleScreenState();
+}
+
+class _UpcomingScheduleScreenState extends State<UpcomingScheduleScreen>
+    with SingleTickerProviderStateMixin {
   final _skinColor = Color(0xffffe9e3);
+
+  AnimationController _controller;
+  Animation _animation;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animation = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    Provider.of<Schedule>(context, listen: false)
+        .getandsetSchedules()
+        .then((_) {
+      setState(() {
+        _isLoading = false;
+        _controller.forward();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final schedules = Provider.of<Schedule>(context).schedules;
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: StudentDrawer(4),
@@ -64,18 +101,29 @@ class UpcomingScheduleScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: _skinColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: ScheduleBuilder(),
-                ),
-              ),
-            )
+            _isLoading
+                ? Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.black,
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: FadeTransition(
+                        opacity: _animation,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: _skinColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ScheduleBuilder(schedules),
+                        ),
+                      ),
+                    ),
+                  )
           ],
         ),
       ),

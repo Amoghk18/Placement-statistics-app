@@ -1,62 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CourseBuilder extends StatelessWidget {
-  final _courses = [
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Java Complete Guide 2020",
-      "creator": "Abc Xyz",
-      "source": "Udemy",
-      "link": "https://abc.com"
-    },
-  ];
+  final _courses;
+  CourseBuilder(this._courses);
 
   @override
   Widget build(BuildContext context) {
@@ -70,12 +16,12 @@ class CourseBuilder extends StatelessWidget {
         itemCount: _courses.length,
         itemBuilder: (ctx, i) => ListTile(
           title: Text(
-            _courses[i]["name"],
+            _courses[i].name,
             style: TextStyle(color: Colors.white, fontSize: 20),
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            "${_courses[i]['creator']}\n${_courses[i]['source']}",
+            "${_courses[i].creator}\n${_courses[i].source}",
             style: TextStyle(color: Colors.white70, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),

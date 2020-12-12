@@ -1,55 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BuildEbooks extends StatelessWidget {
-
-  final _ebooks = [
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-    {
-      "name": "Python Complete Reference",
-      "author": "Abc Xyz",
-      "link": "https://abc.com"
-    },
-  ];
-
+  final _ebooks;
+  BuildEbooks(this._ebooks);
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,12 +12,12 @@ class BuildEbooks extends StatelessWidget {
         itemCount: _ebooks.length,
         itemBuilder: (ctx, i) => ListTile(
           title: Text(
-            _ebooks[i]["name"],
+            _ebooks[i].name,
             style: TextStyle(color: Colors.white, fontSize: 20),
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            _ebooks[i]["author"],
+            _ebooks[i].author,
             style: TextStyle(color: Colors.white70, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),

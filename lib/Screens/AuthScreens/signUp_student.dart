@@ -19,6 +19,7 @@ class _SignUpStudentState extends State<SignUpStudent> {
     "dept": "",
     "password": "",
     "confirmPass": "",
+    "role": "student",
   };
 
   final _semester = [1, 2, 3, 4, 5, 6, 7, 8];
