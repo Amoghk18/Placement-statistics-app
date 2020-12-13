@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:placement_stats/Providers/Chart.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/chart_detail_screen.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,6 @@ class ChartsForStudent extends StatefulWidget {
 }
 
 class _ChartsForStudentState extends State<ChartsForStudent> {
-
   bool _isLoading = true;
 
   @override
@@ -24,7 +24,7 @@ class _ChartsForStudentState extends State<ChartsForStudent> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
@@ -48,10 +48,19 @@ class _ChartsForStudentState extends State<ChartsForStudent> {
     final _charts = Provider.of<Chart>(context).charts;
     return _isLoading
         ? Container(
-          height: MediaQuery.of(context).size.height * 0.43,
+            height: MediaQuery.of(context).size.height * 0.43,
+            padding: const EdgeInsets.fromLTRB(150, 0, 150, 0),
             child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.blue,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Lottie.asset(
+                    "assets/images/loading-worms-json.json",
+                    animate: true,
+                    repeat: true,
+                  ),
+                ),
               ),
             ),
           )

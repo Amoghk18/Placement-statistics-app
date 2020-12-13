@@ -1,8 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
 import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
+import 'package:placement_stats/Utils/HttpException.dart';
+import 'package:placement_stats/Utils/sfDialog.dart';
+import 'package:provider/provider.dart';
 
 class LoginFormRecruiter extends StatefulWidget {
   static const String routeName = "/login-recruiter";
@@ -11,11 +15,12 @@ class LoginFormRecruiter extends StatefulWidget {
 }
 
 class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
-  var _usn;
+  var _email;
   var _password;
   final _role = "recruiter";
   final _formKey = GlobalKey<FormState>();
   FocusNode _focusNode = FocusNode();
+  var _isLoading = false;
 
   TapGestureRecognizer _ontap;
   var _showPassword = false;
@@ -36,11 +41,52 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
     Navigator.of(context).pushReplacementNamed(SignUpRecruiter.routeName);
   }
 
-  void _login() {
+  void _login() async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
-    print(_usn + " : " + _password);
-    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<Auth>(context, listen: false)
+          .login(_email, _password, _role);
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    } on HttpException catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later.",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    }
   }
 
   Widget _buildImg(String name) {
@@ -75,12 +121,17 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
           child: Column(
             children: [
               _buildImg("assets/images/login.jpg"),
-              
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    Divider(thickness: 2, indent: 50, endIndent: 50, color: Colors.black, height: 40,),
+                    Divider(
+                      thickness: 2,
+                      indent: 50,
+                      endIndent: 50,
+                      color: Colors.black,
+                      height: 40,
+                    ),
                     Container(
                       margin: const EdgeInsets.fromLTRB(50, 0, 0, 20),
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -139,13 +190,15 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
                         onFieldSubmitted: (_) {
                           FocusScope.of(context).requestFocus(_focusNode);
                         },
-                        onSaved: (val) => _usn = val,
+                        onSaved: (val) => _email = val,
                         validator: (val) {
                           if (val.isEmpty) {
                             return "Please enter a valid email";
                           }
-                          if (!val.contains("@")) {
-                            return "Please enter a valid email";
+                          RegExp rg = new RegExp(
+                              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+                          if (!rg.hasMatch(val)) {
+                            return "Please enter a valid email address";
                           }
                           return null;
                         },
@@ -217,20 +270,32 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    OutlineButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      textColor: Colors.blueAccent,
-                      onPressed: _login,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    ),
+                    _isLoading
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.black,
+                                ),
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          )
+                        : OutlineButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            textColor: Colors.blueAccent,
+                            onPressed: _login,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Login",
+                                style: TextStyle(fontSize: 24),
+                              ),
+                            ),
+                          ),
                     Container(
                       padding: EdgeInsets.all(10),
                       alignment: Alignment.center,
@@ -250,7 +315,13 @@ class _LoginFormRecruiterState extends State<LoginFormRecruiter> {
                         ),
                       ),
                     ),
-                    Divider(thickness: 2, indent: 100, endIndent: 100, color: Colors.black, height: 40,),
+                    Divider(
+                      thickness: 2,
+                      indent: 100,
+                      endIndent: 100,
+                      color: Colors.black,
+                      height: 40,
+                    ),
                   ],
                 ),
               ),

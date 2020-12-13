@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/forgot_password.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/placement_stats_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/resource_screen.dart';
@@ -7,6 +8,7 @@ import 'package:placement_stats/Screens/DetailScreens/student/share_your_experie
 import 'package:placement_stats/Screens/DetailScreens/student/upcoming_schedule.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
 import 'package:placement_stats/home_page.dart';
+import 'package:provider/provider.dart';
 
 class StudentDrawer extends StatefulWidget {
   StudentDrawer(this.current);
@@ -136,6 +138,7 @@ class _StudentDrawerState extends State<StudentDrawer> {
                             );
                             break;
                           case 6:
+                            Provider.of<Auth>(context, listen: false).logout();
                             nav.pushReplacementNamed(HomePage.routeName);
                             break;
                         }

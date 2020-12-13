@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Providers/Auth.dart';
+import 'package:placement_stats/Utils/HttpException.dart';
+import 'package:placement_stats/Utils/sfDialog.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordStudent extends StatefulWidget {
   static const String routeName = "/forgot-password-student";
@@ -24,16 +28,51 @@ class _ForgotPasswordStudentState extends State<ForgotPasswordStudent> {
   var _confnewP = false;
   var _currP = false;
 
-  void _changePass(String from) {
+  void _changePass(String from) async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
     print(_userPass);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text("Succes!"),
-        content: Text("Your password was changed successfully"),
-        actions: [
+    try {
+      if (from == "update") {
+        await Provider.of<Auth>(context, listen: false).updatePassword(
+          _userPass["currPass"],
+          _userPass["newPass"],
+        );
+      } else {
+        await Provider.of<Auth>(context, listen: false)
+            .resetPassword(_userPass["OTP"], _userPass["newPass"]);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Succes!"),
+          content: Text("Your password was changed successfully"),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                if (from == "update") Navigator.of(context).pop();
+              },
+              child: Text("Ok"),
+            )
+          ],
+        ),
+      );
+    } on HttpException catch (err) {
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
           FlatButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -41,13 +80,102 @@ class _ForgotPasswordStudentState extends State<ForgotPasswordStudent> {
               if (from == "update") Navigator.of(context).pop();
             },
             child: Text("Ok"),
-          )
+          ),
         ],
-      ),
-    );
+        context,
+      );
+    } catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later",
+        [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              if (from == "update") Navigator.of(context).pop();
+            },
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    }
   }
 
   var _gotOTP = false;
+  var _otpLoading = false;
+  var _isLoading = false;
+
+  void _getOtp(String from) async {
+    try {
+      setState(() {
+        _otpLoading = true;
+      });
+      await Provider.of<Auth>(context, listen: false).forgotPassword();
+      setState(() {
+        _otpLoading = false;
+        _gotOTP = true;
+      });
+      customDialog(
+        "Success",
+        "Email has been successfully sent!",
+        [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } on HttpException catch (err) {
+      setState(() {
+        _otpLoading = false;
+        _gotOTP = true;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              if (from == "update") Navigator.of(context).pop();
+            },
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } catch (err) {
+      setState(() {
+        _otpLoading = false;
+        _gotOTP = true;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later",
+        [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              if (from == "update") Navigator.of(context).pop();
+            },
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -285,51 +413,129 @@ class _ForgotPasswordStudentState extends State<ForgotPasswordStudent> {
                           style: TextStyle(color: Colors.black),
                           onSaved: (val) => _userPass["confirmCurrPass"] = val,
                           validator: (val) {
-                            if (val.isEmpty) {
-                              return "Please enter a valid password";
-                            }
-                            if (val.length < 6) {
-                              return "Password length must be greater than 6";
+                            final cp = Provider.of<Auth>(context, listen: false)
+                                .student;
+                            if (cp.password != val) {
+                              return "Invalid Password";
                             }
                             return null;
                           },
                         ),
                       )
-                    : Align(
-                        child: RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              _gotOTP = true;
-                            });
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 30, 20),
+                        child: TextFormField(
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: Colors.red),
+                              gapPadding: 5,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.lock_open,
+                              color: Colors.black,
+                            ),
+                            labelText: "OTP",
+                            hintText: "Enter the OTP",
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            hintStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _skinColor),
+                              gapPadding: 5,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(28),
+                              borderSide: BorderSide(color: _borderColor),
+                              gapPadding: 5,
+                            ),
+                          ),
+                          cursorColor: Colors.black,
+                          style: TextStyle(color: Colors.black),
+                          onSaved: (val) => _userPass["OTP"] = val,
+                          validator: (val) {
+                            if (val.isEmpty) {
+                              return "Please enter a valid OTP";
+                            }
+                            if (val.length != 12) {
+                              return "Please enter a valid OTP";
+                            }
+                            return null;
                           },
-                          child: Text("Request OTP"),
-                          color: Colors.black,
-                          textColor: Colors.white,
                         ),
                       ),
+                _otpLoading
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.black),
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      )
+                    : from == "update"
+                        ? Container()
+                        : Align(
+                            child: RaisedButton(
+                              onPressed: _gotOTP ? null : () => _getOtp(from),
+                              child: Text("Request OTP"),
+                              color: Colors.black,
+                              textColor: Colors.white,
+                            ),
+                          ),
                 SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(130, 0, 0, 20),
-                  child: OutlineButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    textColor: _borderColor,
-                    borderSide: BorderSide(
-                      style: BorderStyle.none,
-                    ),
-                    onPressed: from == "update"
-                        ? () => _changePass(from)
-                        : _gotOTP ? () => _changePass(from) : null,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Update",
-                        style: TextStyle(fontSize: 24),
+                _isLoading
+                    ? Align(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.black),
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(130, 0, 0, 20),
+                        child: OutlineButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          textColor: _borderColor,
+                          borderSide: BorderSide(
+                            style: BorderStyle.none,
+                          ),
+                          onPressed: from == "update"
+                              ? () => _changePass(from)
+                              : _gotOTP ? () => _changePass(from) : null,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Update",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 Divider(
                   thickness: 2,
                   indent: 100,

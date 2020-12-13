@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Providers/Schedule.dart';
 import 'package:placement_stats/Widgets/Student/build_schedule.dart';
 import 'package:placement_stats/Widgets/Student/student_appDrawer.dart';
@@ -42,9 +44,17 @@ class _UpcomingScheduleScreenState extends State<UpcomingScheduleScreen>
     super.dispose();
   }
 
+  String _getAbbrName(String name) {
+    final arr = name.split(" ");
+    var str = "";
+    arr.forEach((e) => str += e[0]);
+    return str;
+  }
+
   @override
   Widget build(BuildContext context) {
     final schedules = Provider.of<Schedule>(context).schedules;
+    final data = Provider.of<Auth>(context).student;
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: StudentDrawer(4),
@@ -67,7 +77,7 @@ class _UpcomingScheduleScreenState extends State<UpcomingScheduleScreen>
               backgroundColor: Colors.orange[300],
               child: FittedBox(
                 child: Text(
-                  "SN",
+                  _getAbbrName(data.name),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -103,9 +113,20 @@ class _UpcomingScheduleScreenState extends State<UpcomingScheduleScreen>
             SizedBox(height: 20),
             _isLoading
                 ? Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.black,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(150, 0, 150, 0),
+                      child: Center(
+                        child: FittedBox(
+                            fit: BoxFit.contain,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Lottie.asset(
+                                  "assets/images/loading-worms-json.json",
+                                  animate: true,
+                                  repeat: true,
+                                ),
+                              ),
+                            ),
                       ),
                     ),
                   )

@@ -126,18 +126,23 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
       _isLoading = true;
     });
     _data["datetime"] =
-        "${DateFormat.d().format(_selectedDate)} ${DateFormat.EEEE().format(_selectedDate)}, ${DateFormat.MMM().format(_selectedDate)}" + " at " + _selectedTime.format(context);
+        "${DateFormat.d().format(_selectedDate)} ${DateFormat.EEEE().format(_selectedDate)}, ${DateFormat.MMM().format(_selectedDate)}" +
+            " at " +
+            _selectedTime.format(context);
     try {
       await Provider.of<Schedule>(context, listen: false).createSchedule(_data);
+      setState(() {
+        _isLoading = false;
+      });
       sfDialog("Success",
           "Successfully added a pre-placement talk. The students will be notified!");
     } catch (err) {
+      setState(() {
+        _isLoading = false;
+      });
       sfDialog(
           "Error", "Something went wrong. Please Try again after some time.");
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -342,11 +347,14 @@ class _PrePlacementTalkScreenState extends State<PrePlacementTalkScreen> {
                   Align(
                     child: _isLoading
                         ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                              child: CircularProgressIndicator(),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                strokeWidth: 2,
+                              ),
                             ),
-                        )
+                          )
                         : OutlineButton(
                             onPressed: _notify,
                             borderSide: BorderSide(style: BorderStyle.none),

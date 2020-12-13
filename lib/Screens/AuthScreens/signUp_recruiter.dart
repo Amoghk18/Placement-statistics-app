@@ -1,8 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
+import 'package:placement_stats/Utils/HttpException.dart';
+import 'package:placement_stats/Utils/sfDialog.dart';
+import 'package:provider/provider.dart';
 
 class SignUpRecruiter extends StatefulWidget {
   static const String routeName = "/signUp-recruiter";
@@ -13,7 +17,7 @@ class SignUpRecruiter extends StatefulWidget {
 class _SignUpRecruiterState extends State<SignUpRecruiter> {
   final _userData = {
     "name": "",
-    "company": "",
+    "companyName": "",
     "email": "",
     "position": "",
     "password": "",
@@ -34,6 +38,7 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
   PageController _pageController;
   Color _skinColor = Color(0xffffe9e3);
   Color _borderColor = Color(0xff681313);
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -53,8 +58,9 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
     Navigator.of(context).pushReplacementNamed(LoginFormRecruiter.routeName);
   }
 
-  void _signUp() {
+  void _signUp() async {
     if (!_formKey.currentState.validate()) return;
+    _formKey.currentState.save();
     if (_userData["password"] != _userData["confirmPass"]) {
       showDialog(
         context: context,
@@ -67,9 +73,45 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
         ),
       );
     }
-    _formKey.currentState.save();
-    print(_userData);
-    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<Auth>(context, listen: false).signup(_userData);
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    } on HttpException catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = true;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later.",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    }
   }
 
   Widget _buildImg(String name) {
@@ -298,7 +340,7 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(_emailFocus);
                           },
-                          onSaved: (val) => _userData["comapny"] = val,
+                          onSaved: (val) => _userData["companyName"] = val,
                           validator: (val) {
                             if (val.isEmpty) {
                               return "Please enter a valid company name";
@@ -357,9 +399,14 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                             if (val.isEmpty) {
                               return "Please enter a valid Email Id";
                             }
-                            if (!val.contains("@")) {
-                              return "Please enter a valid Email Id";
+                            RegExp rg = new RegExp(
+                                r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+                            if (!rg.hasMatch(val)) {
+                              return "Please enter a valid email address";
                             }
+                            // if (!val.contains("@")) {
+                            //   return "Please enter a valid Email Id";
+                            // }
                             return null;
                           },
                         ),
@@ -446,9 +493,12 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                                   _showPassword = !_showPassword;
                                 });
                               },
-                              child: Icon(_showPassword
-                                  ? FontAwesome.eye_slash
-                                  : FontAwesome.eye, color: Colors.black,),
+                              child: Icon(
+                                _showPassword
+                                    ? FontAwesome.eye_slash
+                                    : FontAwesome.eye,
+                                color: Colors.black,
+                              ),
                             ),
                             labelText: "Password",
                             hintText: "Enter your password",
@@ -514,9 +564,12 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                                   _showCPassword = !_showCPassword;
                                 });
                               },
-                              child: Icon(_showCPassword
-                                  ? FontAwesome.eye_slash
-                                  : FontAwesome.eye, color: Colors.black,),
+                              child: Icon(
+                                _showCPassword
+                                    ? FontAwesome.eye_slash
+                                    : FontAwesome.eye,
+                                color: Colors.black,
+                              ),
                             ),
                             labelText: "Confirm Password",
                             hintText: "Confirm your password",
@@ -549,24 +602,36 @@ class _SignUpRecruiterState extends State<SignUpRecruiter> {
                         ),
                       ),
                       SizedBox(height: 40),
-                      OutlineButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        textColor: _borderColor,
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          style: BorderStyle.none,
-                        ),
-                        onPressed: _signUp,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(fontSize: 24),
-                          ),
-                        ),
-                      ),
+                      _isLoading
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.black,
+                                  ),
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            )
+                          : OutlineButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              textColor: _borderColor,
+                              borderSide: BorderSide(
+                                color: Colors.black,
+                                style: BorderStyle.none,
+                              ),
+                              onPressed: _signUp,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ),
+                            ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                         alignment: Alignment.center,

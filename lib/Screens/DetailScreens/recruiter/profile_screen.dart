@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/DetailScreens/recruiter/forgot_pass.dart';
+import 'package:placement_stats/Utils/HttpException.dart';
+import 'package:placement_stats/Utils/sfDialog.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreenRecruiter extends StatefulWidget {
   static const String routeName = "/profile-recruiter";
@@ -10,12 +14,12 @@ class ProfileScreenRecruiter extends StatefulWidget {
 }
 
 class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
-  final _userData = {
-    "name": "Abc xyz",
-    "company": "Abx Xyz",
-    "email": "abc@xyz.com",
-    "position": "abcxyz",
-    "password": "",
+  final _newData = {
+    "name": "",
+    "companyName": "",
+    "email": "",
+    "position": "",
+    "role": "recruiter"
   };
 
   @override
@@ -23,7 +27,11 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
     super.initState();
   }
 
-  var b = true;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   final Color _skinColor = Color(0xffffe9e3);
   final Color _borderColor = Color(0xff681313);
@@ -33,31 +41,23 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
   final _posFocus = FocusNode();
   final _passFocus = FocusNode();
   var _showPassword = false;
+  var _isLoading = false;
 
-  Widget buildImg() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.fromLTRB(8, 45, 8, 8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.asset(
-          "assets/images/chart.jpg",
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+  String _getAbbrName(String name) {
+    final arr = name.split(" ");
+    var str = "";
+    arr.forEach((e) => str += e[0]);
+    return str;
   }
 
-  Widget buildTxt() {
+  Widget buildTxt(String name) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Align(
           child: Text(
-        "RN",
+        _getAbbrName(name),
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.black,
           fontWeight: FontWeight.w400,
           fontSize: 60,
         ),
@@ -65,21 +65,78 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
     );
   }
 
+  void _save() async {
+    if (!_formKey.currentState.validate()) return;
+    _formKey.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<Auth>(context, listen: false).updateProfile(_newData);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Success",
+        "Profile was updated successfully!",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } on HttpException catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later.",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _userData = Provider.of<Auth>(context, listen: false).recruiter;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.45,
-              title: Text("Edit Profile"),
+              expandedHeight: MediaQuery.of(context).size.height * 0.2,
               elevation: 0,
               floating: true,
-              backgroundColor: b ? Colors.white : Theme.of(context).primaryColor,
+              backgroundColor: Colors.white,
               flexibleSpace: FlexibleSpaceBar(
-                background: b ? buildImg() : buildTxt(),
+                background: buildTxt(_userData.name),
               ),
             ),
             SliverList(
@@ -123,7 +180,7 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                 padding:
                                     const EdgeInsets.fromLTRB(40, 10, 30, 20),
                                 child: TextFormField(
-                                  initialValue: _userData["name"],
+                                  initialValue: _userData.name,
                                   keyboardType: TextInputType.name,
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
@@ -168,7 +225,7 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                     FocusScope.of(context)
                                         .requestFocus(_companyFocus);
                                   },
-                                  onSaved: (val) => _userData["name"] = val,
+                                  onSaved: (val) => _newData["name"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
                                       return "Please enter a valid name";
@@ -181,7 +238,7 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                 padding:
                                     const EdgeInsets.fromLTRB(40, 10, 30, 20),
                                 child: TextFormField(
-                                  initialValue: _userData["company"],
+                                  initialValue: _userData.companyName,
                                   focusNode: _companyFocus,
                                   keyboardType: TextInputType.name,
                                   textInputAction: TextInputAction.next,
@@ -227,10 +284,11 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                     FocusScope.of(context)
                                         .requestFocus(_emailFocus);
                                   },
-                                  onSaved: (val) => _userData["name"] = val,
+                                  onSaved: (val) =>
+                                      _newData["companyName"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
-                                      return "Please enter a valid name";
+                                      return "Please enter a valid Company Name";
                                     }
                                     return null;
                                   },
@@ -240,7 +298,7 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                 padding:
                                     const EdgeInsets.fromLTRB(40, 10, 30, 20),
                                 child: TextFormField(
-                                  initialValue: _userData["email"],
+                                  initialValue: _userData.email,
                                   focusNode: _emailFocus,
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
@@ -286,13 +344,15 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                     FocusScope.of(context)
                                         .requestFocus(_posFocus);
                                   },
-                                  onSaved: (val) => _userData["email"] = val,
+                                  onSaved: (val) => _newData["email"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
                                       return "Please enter a valid email id";
                                     }
-                                    if (!val.contains("@")) {
-                                      return "Please enter a valid email id";
+                                    RegExp rg = new RegExp(
+                                        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+                                    if (!rg.hasMatch(val)) {
+                                      return "Please enter a valid email address";
                                     }
                                     return null;
                                   },
@@ -302,7 +362,7 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                 padding:
                                     const EdgeInsets.fromLTRB(40, 10, 30, 20),
                                 child: TextFormField(
-                                  initialValue: _userData["position"],
+                                  initialValue: _userData.position,
                                   focusNode: _posFocus,
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
@@ -347,7 +407,7 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                     FocusScope.of(context)
                                         .requestFocus(_passFocus);
                                   },
-                                  onSaved: (val) => _userData["position"] = val,
+                                  onSaved: (val) => _newData["position"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
                                       return "Please enter a valid Position";
@@ -414,13 +474,9 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                       gapPadding: 5,
                                     ),
                                   ),
-                                  onSaved: (val) => _userData["password"] = val,
                                   validator: (val) {
-                                    if (val.isEmpty) {
-                                      return "Please enter a valid password";
-                                    }
-                                    if (val.length < 6) {
-                                      return "Password must be at least 6 characters long";
+                                    if (val != _userData.password) {
+                                      return "Invalid Credentials";
                                     }
                                     return null;
                                   },
@@ -459,24 +515,37 @@ class _ProfileScreenRecruiterState extends State<ProfileScreenRecruiter> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              OutlineButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                textColor: _borderColor,
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  style: BorderStyle.none,
-                                ),
-                                onPressed: () {},
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    " Save ",
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                ),
-                              ),
+                              _isLoading
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            Colors.black,
+                                          ),
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                    )
+                                  : OutlineButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      textColor: _borderColor,
+                                      borderSide: BorderSide(
+                                        color: Colors.black,
+                                        style: BorderStyle.none,
+                                      ),
+                                      onPressed: _save,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          " Save ",
+                                          style: TextStyle(fontSize: 24),
+                                        ),
+                                      ),
+                                    ),
                               Divider(
                                 color: Colors.black,
                                 indent: 100,

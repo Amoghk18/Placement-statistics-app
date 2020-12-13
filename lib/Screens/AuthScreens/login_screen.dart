@@ -1,8 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:lottie/lottie.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_student.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
+import 'package:placement_stats/Utils/HttpException.dart';
+import 'package:placement_stats/Utils/sfDialog.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   static const String routeName = "/login-student";
@@ -19,6 +24,7 @@ class _LoginFormState extends State<LoginForm> {
 
   TapGestureRecognizer _ontap;
   var _showPassword = false;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -36,11 +42,49 @@ class _LoginFormState extends State<LoginForm> {
     Navigator.of(context).pushReplacementNamed(SignUpStudent.routeName);
   }
 
-  void _login() {
+  void _login() async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
-    print(_usn + " : " + _password);
-    Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<Auth>(context, listen: false)
+          .login(_usn, _password, _role);
+      Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
+    } on HttpException catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later.",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    }
   }
 
   Widget _buildImg(String name) {
@@ -148,6 +192,11 @@ class _LoginFormState extends State<LoginForm> {
                           if (val.isEmpty) {
                             return "Please enter a valid USN";
                           }
+                          RegExp rg =
+                              new RegExp(r"^1BM[0-9]{2}[A-Z]{2}[0-9]{3}$");
+                          if (!rg.hasMatch(val)) {
+                            return "Please enter a valid USN";
+                          }
                           return null;
                         },
                       ),
@@ -217,23 +266,35 @@ class _LoginFormState extends State<LoginForm> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    OutlineButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      textColor: Colors.blueAccent,
-                      onPressed: _login,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    ),
+                    const SizedBox(height: 20),
+                    _isLoading
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.black,
+                                ),
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          )
+                        : OutlineButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            textColor: Colors.blueAccent,
+                            onPressed: _login,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Login",
+                                style: TextStyle(fontSize: 24),
+                              ),
+                            ),
+                          ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
                       alignment: Alignment.center,
                       child: RichText(
                         text: TextSpan(
@@ -268,3 +329,21 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
+
+/*
+Container(
+                          height: 100,
+                          width: 100,
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Lottie.asset(
+                                  "assets/images/loading-worms-json.json",
+                                  animate: true,
+                                  repeat: true,
+                                ),
+                              ),
+                            ),
+                        )
+*/

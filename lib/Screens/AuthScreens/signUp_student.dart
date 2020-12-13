@@ -1,8 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
+import 'package:placement_stats/Utils/HttpException.dart';
+import 'package:placement_stats/Utils/sfDialog.dart';
+import 'package:provider/provider.dart';
 
 class SignUpStudent extends StatefulWidget {
   static const String routeName = "/signUp-student";
@@ -48,6 +52,7 @@ class _SignUpStudentState extends State<SignUpStudent> {
   var _showCPassword = false;
   Color _skinColor = Color(0xffffe9e3);
   Color _borderColor = Color(0xff681313);
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -67,23 +72,62 @@ class _SignUpStudentState extends State<SignUpStudent> {
     Navigator.of(context).pushReplacementNamed(LoginForm.routeName);
   }
 
-  void _signUp() {
+  void _signUp() async {
     if (!_formKey.currentState.validate()) return;
+    _formKey.currentState.save();
     if (_userData["password"] != _userData["confirmPass"]) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text("Password error"),
-          content: Text("Passwords do not match!"),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+      customDialog(
+        "Error",
+        "Passwords do not match",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
           ),
-        ),
+        ],
+        context,
+      );
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<Auth>(context, listen: false).signup(_userData);
+      Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
+    } on HttpException catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later.",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
       );
     }
-    _formKey.currentState.save();
-    print(_userData);
-    Navigator.of(context).pushReplacementNamed(HomeScreenStudent.routeName);
   }
 
   Widget _buildImg(String name) {
@@ -320,9 +364,14 @@ class _SignUpStudentState extends State<SignUpStudent> {
                             if (val.isEmpty) {
                               return "Please enter a valid email id";
                             }
-                            if (!val.contains("@")) {
-                              return "Please enter a valid email id";
+                            RegExp rg = new RegExp(
+                                r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+                            if (!rg.hasMatch(val)) {
+                              return "Please enter a valid email address";
                             }
+                            // if (!val.contains("@")) {
+                            //   return "Please enter a valid email id";
+                            // }
                             return null;
                           },
                         ),
@@ -374,6 +423,11 @@ class _SignUpStudentState extends State<SignUpStudent> {
                           onSaved: (val) => _userData["usn"] = val,
                           validator: (val) {
                             if (val.isEmpty) {
+                              return "Please enter a valid USN";
+                            }
+                            RegExp rg =
+                                new RegExp(r"^1BM[0-9]{2}[A-Z]{2}[0-9]{3}$");
+                            if (!rg.hasMatch(val)) {
                               return "Please enter a valid USN";
                             }
                             return null;
@@ -623,24 +677,36 @@ class _SignUpStudentState extends State<SignUpStudent> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      OutlineButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        textColor: _borderColor,
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          style: BorderStyle.none,
-                        ),
-                        onPressed: _signUp,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(fontSize: 24),
-                          ),
-                        ),
-                      ),
+                      _isLoading
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.black,
+                                  ),
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            )
+                          : OutlineButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              textColor: _borderColor,
+                              borderSide: BorderSide(
+                                color: Colors.black,
+                                style: BorderStyle.none,
+                              ),
+                              onPressed: _signUp,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ),
+                            ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
                         alignment: Alignment.center,

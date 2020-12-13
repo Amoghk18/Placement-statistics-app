@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:placement_stats/Providers/Hiring_process.dart';
 import 'package:provider/provider.dart';
 
@@ -75,13 +76,22 @@ class _CompanyDescriptionState extends State<CompanyDescription> {
             ),
             _isLoading
                 ? Container(
-                  height: 300,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.blue,
+                  margin: const EdgeInsets.fromLTRB(0, 300, 0, 300),
+                      padding: const EdgeInsets.fromLTRB(150, 0, 150, 0),
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Lottie.asset(
+                              "assets/images/loading-worms-json.json",
+                              animate: true,
+                              repeat: true,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  )
+                    )
                 : Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

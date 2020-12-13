@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/experience_detail.dart';
 import 'package:provider/provider.dart';
 import '../../Providers/Experience.dart';
@@ -10,7 +11,6 @@ class ExperiencesList extends StatefulWidget {
 
 class _ExperiencesListState extends State<ExperiencesList>
     with SingleTickerProviderStateMixin {
-      
   AnimationController _animationController;
   Animation _animation;
   bool _isLoading = true;
@@ -31,7 +31,7 @@ class _ExperiencesListState extends State<ExperiencesList>
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _animationController.dispose();
     super.dispose();
   }
@@ -48,10 +48,18 @@ class _ExperiencesListState extends State<ExperiencesList>
     final _exp = Provider.of<Experience>(context).experiences;
     return _isLoading
         ? Container(
+          alignment: Alignment.center,
             height: MediaQuery.of(context).size.height * 0.38,
-            child: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.red,
+            padding: const EdgeInsets.fromLTRB(150, 0, 150, 0),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Lottie.asset(
+                  "assets/images/loading-worms-json.json",
+                  animate: true,
+                  repeat: true,
+                ),
               ),
             ),
           )
@@ -155,3 +163,32 @@ class _ExperiencesListState extends State<ExperiencesList>
           );
   }
 }
+
+/*
+Container(
+            height: MediaQuery.of(context).size.height * 0.38,
+            child: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                strokeWidth: 2,
+              ),
+            ),
+          )
+*/
+/*
+Container(
+                          height: 100,
+                          width: 100,
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Lottie.asset(
+                                  "assets/images/loading-worms-json.json",
+                                  animate: true,
+                                  repeat: true,
+                                ),
+                              ),
+                            ),
+                        )
+*/

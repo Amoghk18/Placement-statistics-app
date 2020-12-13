@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/forgot_password.dart';
+import 'package:placement_stats/Utils/HttpException.dart';
+import 'package:placement_stats/Utils/sfDialog.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const String routeName = "/profile-student";
@@ -10,13 +14,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _userData = {
-    "name": "Abc xyz",
-    "email": "abc@xyz.com",
-    "usn": "1BMxxyyzzz",
-    "sem": "4",
-    "dept": "CSE",
-    "password": "",
+  final _newData = {
+    "name": "",
+    "email": "",
+    "usn": "",
+    "sem": "",
+    "dept": "",
+    "role": "student",
   };
 
   final _semester = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -34,15 +38,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   var _sem = "";
   var _dept = "";
+  var _isLoading = false;
 
   @override
   void initState() {
-    _sem = _userData["sem"];
-    _dept = _userData["dept"];
     super.initState();
   }
 
-  var b = true;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   final Color _skinColor = Color(0xffffe9e3);
   final Color _borderColor = Color(0xff681313);
@@ -52,52 +59,108 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _passFocus = FocusNode();
   var _showPassword = false;
 
-  Widget buildImg() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.fromLTRB(8, 45, 8, 8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.asset(
-          "assets/images/chart.jpg",
-          fit: BoxFit.cover,
+  String _getAbbrName(String name) {
+    final arr = name.split(" ");
+    var str = "";
+    arr.forEach((e) => str += e[0]);
+    return str;
+  }
+
+  Widget _buildTxt(String data) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Align(
+        child: Text(
+          _getAbbrName(data),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+            fontSize: 60,
+          ),
         ),
       ),
     );
   }
 
-  Widget buildTxt() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Align(
-          child: Text(
-        "SN",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w400,
-          fontSize: 60,
-        ),
-      )),
-    );
+  void _init(String sem, String dept) {
+    _sem = sem;
+    _dept = dept;
+  }
+
+  void _save() async {
+    if (!_formKey.currentState.validate()) return;
+    _formKey.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      print(_newData);
+      await Provider.of<Auth>(context, listen: false).updateProfile(_newData);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Success",
+        "Profile was updated successfully!",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } on HttpException catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        err.msg,
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    } catch (err) {
+      print(err);
+      setState(() {
+        _isLoading = false;
+      });
+      customDialog(
+        "Error",
+        "Something went wrong. Please check your connection and try again later.",
+        [
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Ok"),
+          ),
+        ],
+        context,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final _userData = Provider.of<Auth>(context).student;
+    _init(_userData.sem, _userData.dept);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.45,
-              title: Text("Edit Profile"),
+              expandedHeight: MediaQuery.of(context).size.height * 0.2,
               elevation: 0,
               floating: true,
-              backgroundColor: b ? Colors.white : Theme.of(context).primaryColor,
+              backgroundColor: Colors.white,
               flexibleSpace: FlexibleSpaceBar(
-                background: b ? buildImg() : buildTxt(),
+                background: _buildTxt(_userData.name),
               ),
             ),
             SliverList(
@@ -141,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding:
                                     const EdgeInsets.fromLTRB(40, 10, 30, 20),
                                 child: TextFormField(
-                                  initialValue: _userData["name"],
+                                  initialValue: _userData.name,
                                   keyboardType: TextInputType.name,
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
@@ -186,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     FocusScope.of(context)
                                         .requestFocus(_emailFocus);
                                   },
-                                  onSaved: (val) => _userData["name"] = val,
+                                  onSaved: (val) => _newData["name"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
                                       return "Please enter a valid name";
@@ -199,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding:
                                     const EdgeInsets.fromLTRB(40, 10, 30, 20),
                                 child: TextFormField(
-                                  initialValue: _userData["email"],
+                                  initialValue: _userData.email,
                                   focusNode: _emailFocus,
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
@@ -245,13 +308,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     FocusScope.of(context)
                                         .requestFocus(_usnFocus);
                                   },
-                                  onSaved: (val) => _userData["email"] = val,
+                                  onSaved: (val) => _newData["email"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
                                       return "Please enter a valid email id";
                                     }
-                                    if (!val.contains("@")) {
-                                      return "Please enter a valid email id";
+                                    RegExp rg = new RegExp(
+                                        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+                                    if (!rg.hasMatch(val)) {
+                                      return "Please enter a valid email address";
                                     }
                                     return null;
                                   },
@@ -261,20 +326,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding:
                                     const EdgeInsets.fromLTRB(40, 10, 30, 20),
                                 child: TextFormField(
-                                  initialValue: _userData["usn"],
+                                  initialValue: _userData.usn,
                                   focusNode: _usnFocus,
+                                  readOnly: true,
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(28),
-                                      borderSide: BorderSide(color: Colors.red),
-                                      gapPadding: 5,
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(28),
-                                      borderSide: BorderSide(color: Colors.red),
-                                      gapPadding: 5,
-                                    ),
                                     prefixIcon: const Icon(
                                       Icons.person,
                                       color: Colors.black,
@@ -298,7 +354,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(28),
                                       borderSide:
-                                          BorderSide(color: _borderColor),
+                                          BorderSide(color: _skinColor),
                                       gapPadding: 5,
                                     ),
                                   ),
@@ -306,9 +362,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     FocusScope.of(context)
                                         .requestFocus(_passFocus);
                                   },
-                                  onSaved: (val) => _userData["usn"] = val,
+                                  onSaved: (val) => _newData["usn"] = val,
                                   validator: (val) {
                                     if (val.isEmpty) {
+                                      return "Please enter a valid USN";
+                                    }
+                                    RegExp rg = new RegExp(
+                                        r"^1BM[0-9]{2}[A-Z]{2}[0-9]{3}$");
+                                    if (!rg.hasMatch(val)) {
                                       return "Please enter a valid USN";
                                     }
                                     return null;
@@ -371,8 +432,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           }
                                           return null;
                                         },
-                                        onSaved: (val) =>
-                                            _userData["sem"] = val,
+                                        onSaved: (val) => _newData["sem"] = val,
                                       ),
                                     ),
                                     SizedBox(width: 20),
@@ -430,7 +490,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return null;
                                         },
                                         onSaved: (val) =>
-                                            _userData["dept"] = val,
+                                            _newData["dept"] = val,
                                       ),
                                     ),
                                   ],
@@ -442,7 +502,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: TextFormField(
                                   focusNode: _passFocus,
                                   obscureText: _showPassword ? false : true,
-                                  textInputAction: TextInputAction.next,
+                                  textInputAction: TextInputAction.done,
                                   decoration: InputDecoration(
                                     focusedErrorBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(28),
@@ -494,13 +554,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       gapPadding: 5,
                                     ),
                                   ),
-                                  onSaved: (val) => _userData["password"] = val,
                                   validator: (val) {
-                                    if (val.isEmpty) {
-                                      return "Please enter a valid password";
-                                    }
-                                    if (val.length < 6) {
-                                      return "Password must be at least 6 characters long";
+                                    if (val != _userData.password) {
+                                      return "Invalid Password";
                                     }
                                     return null;
                                   },
@@ -537,24 +593,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              OutlineButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                textColor: _borderColor,
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  style: BorderStyle.none,
-                                ),
-                                onPressed: () {},
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    " Save ",
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                ),
-                              ),
+                              _isLoading
+                                  ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            Colors.black,
+                                          ),
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                  )
+                                  : OutlineButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      textColor: _borderColor,
+                                      borderSide: BorderSide(
+                                        color: Colors.black,
+                                        style: BorderStyle.none,
+                                      ),
+                                      onPressed: _save,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          " Save ",
+                                          style: TextStyle(fontSize: 24),
+                                        ),
+                                      ),
+                                    ),
                               Divider(
                                 color: Colors.black,
                                 indent: 100,

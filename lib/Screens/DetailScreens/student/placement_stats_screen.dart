@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Providers/CompanyYear.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/Hiring_process_screen.dart';
 import 'package:placement_stats/Widgets/Student/student_appDrawer.dart';
@@ -28,6 +30,13 @@ class _CompanyDetail extends State<CompanyName> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  String _getAbbrName(String name) {
+    final arr = name.split(" ");
+    var str = "";
+    arr.forEach((e) => str += e[0]);
+    return str;
   }
 
   List<DropdownMenuItem<String>> loadData(int i, CompanyYearModel cy) {
@@ -86,6 +95,7 @@ class _CompanyDetail extends State<CompanyName> {
   Widget build(BuildContext context) {
     final _cyears =
         Provider.of<CompanyYear>(context, listen: false).companyYears;
+    final data = Provider.of<Auth>(context).student;
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: StudentDrawer(1),
@@ -108,7 +118,7 @@ class _CompanyDetail extends State<CompanyName> {
               backgroundColor: Colors.orange[300],
               child: FittedBox(
                 child: Text(
-                  "SN",
+                  _getAbbrName(data.name),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -143,9 +153,20 @@ class _CompanyDetail extends State<CompanyName> {
             SizedBox(height: 20),
             _isLoading
                 ? Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.blue,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(150, 0, 150, 0),
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Lottie.asset(
+                              "assets/images/loading-worms-json.json",
+                              animate: true,
+                              repeat: true,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   )

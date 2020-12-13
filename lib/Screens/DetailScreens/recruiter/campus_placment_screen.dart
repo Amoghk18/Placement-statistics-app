@@ -82,14 +82,16 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
     try {
       await Provider.of<HiringProcess>(context, listen: false)
           .createProcess(_process);
-    } catch (err) {
-      sfDialog("Error", "Something went wrong. Please try again later");
-    } finally {
       setState(() {
         _isLoading = false;
       });
       sfDialog("Success",
           "Process has been created. The same will be sent to students.");
+    } catch (err) {
+      setState(() {
+        _isLoading = false;
+      });
+      sfDialog("Error", "Something went wrong. Please try again later");
     }
   }
 
@@ -586,13 +588,14 @@ class _CampusPlacementScreenState extends State<CampusPlacementScreen> {
                   SizedBox(height: 30),
                   _isLoading
                       ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
                             child: CircularProgressIndicator(
-                              backgroundColor: Colors.black,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                              strokeWidth: 2,
                             ),
                           ),
-                      )
+                        )
                       : OutlineButton(
                           onPressed: _submit,
                           borderSide: BorderSide(style: BorderStyle.none),

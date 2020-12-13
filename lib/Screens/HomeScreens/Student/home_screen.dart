@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/DetailScreens/student/profile_screen.dart';
 import 'package:placement_stats/Widgets/Student/charts_home_screen.dart';
 import 'package:placement_stats/Widgets/Student/experiences_list.dart';
 import 'package:placement_stats/Widgets/Student/student_appDrawer.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreenStudent extends StatefulWidget {
   static const String routeName = "/student-home";
@@ -22,8 +24,16 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
     ],
   );
 
+  String _getAbbrName(String name) {
+    final arr = name.split(" ");
+    var str = "";
+    arr.forEach((e) => str += e[0]);
+    return str;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final data = Provider.of<Auth>(context).student;
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: StudentDrawer(0),
@@ -50,7 +60,7 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
                 backgroundColor: Colors.orange[300],
                 child: FittedBox(
                   child: Text(
-                    "SN",
+                    _getAbbrName(data.name),
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

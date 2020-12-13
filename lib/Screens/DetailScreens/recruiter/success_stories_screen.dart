@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:placement_stats/Providers/Success_story.dart';
 import 'package:placement_stats/Widgets/Recruiter/build_success_stories.dart';
 import 'package:provider/provider.dart';
@@ -10,20 +11,13 @@ class SuccessStoriesScreen extends StatefulWidget {
   _SuccessStoriesScreenState createState() => _SuccessStoriesScreenState();
 }
 
-class _SuccessStoriesScreenState extends State<SuccessStoriesScreen>
-    with SingleTickerProviderStateMixin {
+class _SuccessStoriesScreenState extends State<SuccessStoriesScreen> {
   final _skinColor = Color(0xffffe9e3);
 
-  AnimationController _animationController;
-  Animation _animation;
   bool _isLoading = true;
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
-    _animation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     Provider.of<SuccessStory>(context, listen: false)
         .getAndSetSuccessStories()
         .then((_) {
@@ -36,7 +30,6 @@ class _SuccessStoriesScreenState extends State<SuccessStoriesScreen>
 
   @override
   void dispose() {
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -72,27 +65,35 @@ class _SuccessStoriesScreenState extends State<SuccessStoriesScreen>
             SizedBox(height: 20),
             _isLoading
                 ? Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.teal,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(150, 0, 150, 0),
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Lottie.asset(
+                              "assets/images/loading-worms-json.json",
+                              animate: true,
+                              repeat: true,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   )
                 : Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: FadeTransition(
-                        opacity: _animation,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: _skinColor,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: SuccessStoresBuilder(ss),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _skinColor,
+                          borderRadius: BorderRadius.circular(20),
                         ),
+                        child: SuccessStoresBuilder(ss),
                       ),
                     ),
-                  )
+                  ),
           ],
         ),
       ),

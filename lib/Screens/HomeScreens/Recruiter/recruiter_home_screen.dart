@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Screens/DetailScreens/recruiter/campus_placment_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/recruiter/company_reg.dart';
 import 'package:placement_stats/Screens/DetailScreens/recruiter/forgot_pass.dart';
@@ -7,7 +8,7 @@ import 'package:placement_stats/Screens/DetailScreens/recruiter/pre_placement_ta
 import 'package:placement_stats/Screens/DetailScreens/recruiter/profile_screen.dart';
 import 'package:placement_stats/Screens/DetailScreens/recruiter/success_stories_screen.dart';
 import 'package:placement_stats/Widgets/Recruiter/already_recruited.dart';
-import 'package:placement_stats/home_page.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/recruiter-home";
@@ -33,11 +34,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  String _getAbbrName(String name) {
+    final arr = name.split(" ");
+    var str = "";
+    arr.forEach((e) => str += e[0]);
+    return str;
+  }
+
   @override
   Widget build(BuildContext context) {
     //var size = MediaQuery.of(context).size;
     var cardTextStyle = TextStyle(fontSize: 14, color: Colors.white);
-
+    final data = Provider.of<Auth>(context).recruiter;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -62,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircleAvatar(
                 radius: 20,
                 child: FittedBox(
-                  child: Text("RN"),
+                  child: Text(_getAbbrName(data.name)),
                 ),
               ),
             ),
@@ -355,7 +363,8 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                Provider.of<Auth>(context, listen: false).logout();
+                // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),

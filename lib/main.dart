@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:placement_stats/OnBoardingScreens/recruiter/onBoarding.dart';
 import 'package:placement_stats/OnBoardingScreens/student/onBoarding.dart';
+import 'package:placement_stats/Providers/Auth.dart';
 import 'package:placement_stats/Providers/Chart.dart';
 import 'package:placement_stats/Providers/CompanyYear.dart';
 import 'package:placement_stats/Providers/Hiring_process.dart';
 import 'package:placement_stats/Providers/Schedule.dart';
+import 'package:placement_stats/Providers/Success_story.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen.dart';
 import 'package:placement_stats/Screens/AuthScreens/login_screen_recruiter.dart';
 import 'package:placement_stats/Screens/AuthScreens/signUp_recruiter.dart';
@@ -27,6 +29,7 @@ import 'package:placement_stats/Screens/DetailScreens/student/share_your_experie
 import 'package:placement_stats/Screens/DetailScreens/student/upcoming_schedule.dart';
 import 'package:placement_stats/Screens/HomeScreens/Recruiter/recruiter_home_screen.dart';
 import 'package:placement_stats/Screens/HomeScreens/Student/home_screen.dart';
+import 'package:placement_stats/Utils/splash_screen.dart';
 import 'package:placement_stats/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -54,45 +57,62 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Schedule()),
         ChangeNotifierProvider(create: (ctx) => CompanyYear()),
         ChangeNotifierProvider(create: (ctx) => HiringProcess()),
+        ChangeNotifierProvider(create: (ctx) => SuccessStory()),
+        ChangeNotifierProvider(create: (ctx) => Auth()),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.orange,
-          accentColor: Colors.white,
-          textTheme:
-              GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+      child: Consumer<Auth>(
+        builder: (ctx, authData, _) => MaterialApp(
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Colors.orange,
+            accentColor: Colors.white,
+            textTheme:
+                GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: authData.isAuth
+              ? authData.role == "student"
+                  ? HomeScreenStudent()
+                  : HomeScreen()
+              : FutureBuilder(
+                  future: authData.tryAutoLogin(),
+                  builder: (ctx, resultSnapShot) =>
+                      resultSnapShot.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          : HomePage(),
+                ),
+          routes: {
+            HomePage.routeName: (ctx) => HomePage(),
+            LoginForm.routeName: (ctx) => LoginForm(),
+            SignUpRecruiter.routeName: (ctx) => SignUpRecruiter(),
+            SignUpStudent.routeName: (ctx) => SignUpStudent(),
+            LoginFormRecruiter.routeName: (ctx) => LoginFormRecruiter(),
+            HomeScreenStudent.routeName: (ctx) => HomeScreenStudent(),
+            HomeScreen.routeName: (ctx) => HomeScreen(),
+            ExperienceDetailScreen.routeName: (ctx) => ExperienceDetailScreen(),
+            ChartDetailScreen.routeName: (ctx) => ChartDetailScreen(),
+            OnBoardingScreenStudent.routeName: (ctx) =>
+                OnBoardingScreenStudent(),
+            OnBoardingScreenRecruiter.routeName: (ctx) =>
+                OnBoardingScreenRecruiter(),
+            ResourceScreen.routeName: (ctx) => ResourceScreen(),
+            UpcomingScheduleScreen.routeName: (ctx) => UpcomingScheduleScreen(),
+            ShareYourExpScreen.routeName: (ctx) => ShareYourExpScreen(),
+            CompanyName.routeName: (ctx) => CompanyName(),
+            ProfileScreen.routeName: (ctx) => ProfileScreen(),
+            ForgotPasswordStudent.routeName: (ctx) => ForgotPasswordStudent(),
+            ProfileScreenRecruiter.routeName: (ctx) => ProfileScreenRecruiter(),
+            ForgotPasswordRecruiter.routeName: (ctx) =>
+                ForgotPasswordRecruiter(),
+            CompanyRegScreen.routeName: (ctx) => CompanyRegScreen(),
+            CampusPlacementScreen.routeName: (ctx) => CampusPlacementScreen(),
+            PrePlacementTalkScreen.routeName: (ctx) => PrePlacementTalkScreen(),
+            SuccessStoriesScreen.routeName: (ctx) => SuccessStoriesScreen(),
+            CompanyDescription.routeName: (ctx) => CompanyDescription(),
+            SplashScreen.routeName: (ctx) => SplashScreen(),
+          },
         ),
-        home: HomePage(),
-        routes: {
-          HomePage.routeName: (ctx) => HomePage(),
-          LoginForm.routeName: (ctx) => LoginForm(),
-          SignUpRecruiter.routeName: (ctx) => SignUpRecruiter(),
-          SignUpStudent.routeName: (ctx) => SignUpStudent(),
-          LoginFormRecruiter.routeName: (ctx) => LoginFormRecruiter(),
-          HomeScreenStudent.routeName: (ctx) => HomeScreenStudent(),
-          HomeScreen.routeName: (ctx) => HomeScreen(),
-          ExperienceDetailScreen.routeName: (ctx) => ExperienceDetailScreen(),
-          ChartDetailScreen.routeName: (ctx) => ChartDetailScreen(),
-          OnBoardingScreenStudent.routeName: (ctx) => OnBoardingScreenStudent(),
-          OnBoardingScreenRecruiter.routeName: (ctx) =>
-              OnBoardingScreenRecruiter(),
-          ResourceScreen.routeName: (ctx) => ResourceScreen(),
-          UpcomingScheduleScreen.routeName: (ctx) => UpcomingScheduleScreen(),
-          ShareYourExpScreen.routeName: (ctx) => ShareYourExpScreen(),
-          CompanyName.routeName: (ctx) => CompanyName(),
-          ProfileScreen.routeName: (ctx) => ProfileScreen(),
-          ForgotPasswordStudent.routeName: (ctx) => ForgotPasswordStudent(),
-          ProfileScreenRecruiter.routeName: (ctx) => ProfileScreenRecruiter(),
-          ForgotPasswordRecruiter.routeName: (ctx) => ForgotPasswordRecruiter(),
-          CompanyRegScreen.routeName: (ctx) => CompanyRegScreen(),
-          CampusPlacementScreen.routeName: (ctx) => CampusPlacementScreen(),
-          PrePlacementTalkScreen.routeName: (ctx) => PrePlacementTalkScreen(),
-          SuccessStoriesScreen.routeName: (ctx) => SuccessStoriesScreen(),
-          CompanyDescription.routeName: (ctx) => CompanyDescription(),
-        },
       ),
     );
   }
