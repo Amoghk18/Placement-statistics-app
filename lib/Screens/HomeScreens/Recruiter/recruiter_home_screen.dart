@@ -10,6 +10,8 @@ import 'package:placement_stats/Screens/DetailScreens/recruiter/success_stories_
 import 'package:placement_stats/Widgets/Recruiter/already_recruited.dart';
 import 'package:provider/provider.dart';
 
+import '../../../home_page.dart';
+
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/recruiter-home";
   @override
@@ -364,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: InkWell(
               onTap: () {
                 Provider.of<Auth>(context, listen: false).logout();
-                // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                Navigator.of(context).pushReplacementNamed(HomePage.routeName);
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),

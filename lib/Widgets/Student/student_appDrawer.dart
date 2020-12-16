@@ -59,8 +59,16 @@ class _StudentDrawerState extends State<StudentDrawer> {
     super.initState();
   }
 
+  String _getAbbrName(String name) {
+    final arr = name.split(" ");
+    var str = "";
+    arr.forEach((e) => str += e[0]);
+    return str;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final data = Provider.of<Auth>(context).student;
     return Drawer(
       child: Container(
         color: Color(0xff07617d),
@@ -68,26 +76,26 @@ class _StudentDrawerState extends State<StudentDrawer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 40),
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(10),
               child: CircleAvatar(
                 radius: 30,
                 child: FittedBox(
-                  child: Text("SN"),
+                  child: Text(_getAbbrName(data.name))
                 ),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(8, 5, 0, 0),
               child: Text(
-                "Student Name",
+                data.name,
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(8, 5, 0, 0),
               child: Text(
-                "Student.xxyy@bmsce.ac.in",
+                data.email,
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
